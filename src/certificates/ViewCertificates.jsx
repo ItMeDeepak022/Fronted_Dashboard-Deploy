@@ -49,7 +49,7 @@ export default function ViewCertificates() {
                     <div className="flex gap-3 p-2 sm:px-8 pb-6">
 
                         <button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition">
-                          <NavLink to={'/certificates/edit/:id'}>  ✏️ Edit </NavLink> 
+                          <NavLink to={'/certificates/edit/123'}>  ✏️ Edit </NavLink> 
                         </button>
 
                         <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition">
