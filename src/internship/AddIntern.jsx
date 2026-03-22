@@ -2,9 +2,9 @@ import React from 'react'
 
 export default function AddIntern() {
     return (
-        <div>
+        <div className='md:m-0 m-2 '>
             <h1 className="text-3xl text-center m-5 font-bold text-gray-900 mb-8">Add Internship Details</h1>
-            <form className="mt-8 border-1 rounded-2xl border-black flex md:flex-row flex-col md:gap-8  gap-3 md:p-8 p-1 max-w-4xl mx-auto shadow-lg">
+            <form className="md:mt-8 p-0 border-1 rounded-2xl border-black flex md:flex-row flex-col md:gap-8  gap-3 md:p-8  max-w-4xl mx-auto shadow-lg">
 
                 {/* Left Side - Image Upload */}
 
@@ -33,9 +33,11 @@ export default function AddIntern() {
                         <input type="text" placeholder="Enter position" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     </div>
 
-                    <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-medium self-start">
+                    <div className='w-full flex md:justify-start justify-center'>
+                        <button type="submit" className="text-center bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-medium self-start">
                         Save
                     </button>
+                    </div>
                 </div>
             </form>
         </div>

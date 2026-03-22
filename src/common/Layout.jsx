@@ -10,9 +10,9 @@ export default function Layout() {
     return (
         <div className='grid md:grid-cols-[10%_90%]  min-h-screen'>
 
-            <div className='w-full h-full '>
+             
                <Sidebar/>
-            </div>
+            
 
             <div className='flex-1  h-full'>
                 {/* header  */}

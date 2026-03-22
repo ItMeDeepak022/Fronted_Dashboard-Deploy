@@ -23,19 +23,19 @@ export default function Sidebar() {
         <>
             {/* For mobile screen  */}
 
-            {
+             {
                 slider ?
 
-                    <button className='fixed z-70 right-3 top-4' onClick={Sliders}  >
+                    <button className=' fixed  z-70 right-3 top-4' onClick={Sliders}  >
                         <CiMenuFries className='w-7 h-7 font-extrabold text-black md:hidden ' />
                     </button>
                     :
 
-                    <button className='fixed z-70 right-3 top-4' onClick={Sliders}  >
+                    <button className=' fixed  z-70 right-3 top-4' onClick={Sliders}  >
                         <RxCrossCircled className='w-8 h-8 font-extrabold text-black md:hidden ' />
                     </button>
 
-            }
+            }  
 
             <nav className={`w-[70%] min-h-screen
                  fixed top-0
@@ -86,7 +86,7 @@ export default function Sidebar() {
                     ))}
                 </ul>
                 <div className="mt-auto p-3 border-t border-gray-700">
-                    <a href="#" className="transition hover:bg-slate-300 bg-slate-200 px-5 py-2 rounded text-black text-center block">Logout</a>
+                    <Link to="/" className="transition hover:bg-slate-300 bg-slate-200 px-5 py-2 rounded text-black text-center block">Logout</Link>
                 </div>
             </nav>
 
@@ -137,7 +137,7 @@ export default function Sidebar() {
                 </ul>
                 <div className="mt-auto p-3 border-t border-gray-700">
                     <p className="transition hover:bg-slate-300 bg-slate-200 px-5 py-2 rounded text-black text-center block">
-                         <a href={'/'}>Logout</a>
+                          <Link to={'/'}>Logout</Link>
                         </p>
                 </div>
             </nav>
