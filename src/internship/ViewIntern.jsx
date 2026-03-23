@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 export default function ViewIntern() {
     return (
@@ -41,7 +42,7 @@ export default function ViewIntern() {
                                 {/* Action Buttons */}
                                 <div className="flex gap-4 mt-8">
                                     <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition">
-                                        Update
+                                        <Link to={'/internship/edit/1'}>Update</Link>
                                     </button>
                                     <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg transition">
                                         Delete

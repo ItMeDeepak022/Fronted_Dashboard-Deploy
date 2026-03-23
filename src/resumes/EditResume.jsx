@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function AddResume() {
+export default function EditResume() {
 
 
 
@@ -11,7 +11,7 @@ export default function AddResume() {
                 <div className="bg-white rounded-xl shadow-lg w-full max-w-5xl p-2  sm:p-6 md:p-8">
 
                     <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center md:text-left">
-                        Add Resume
+                        Edit Resume
                     </h1>
 
                     {/* Responsive Grid */}
@@ -47,7 +47,7 @@ export default function AddResume() {
                             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
 
                                 <button className="w-full bg-indigo-600 text-white py-2 sm:py-3 rounded-lg hover:bg-indigo-700 transition">
-                                    Upload
+                                     Update
                                 </button>
 
                                  

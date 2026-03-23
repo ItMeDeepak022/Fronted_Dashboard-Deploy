@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-export default function AddCertificates() {
-
+export default function EditProject() {
     const [image, setImage] = useState(null);
 
     const handleImage = (e) => {
@@ -17,13 +16,13 @@ export default function AddCertificates() {
 
                 {/* Title */}
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center">
-                    Add New  Certificates
+                     Edit Project
                 </h2>
 
                 {/* Image Upload */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                         Certificates Image
+                      Edit  Project Image
                     </label>
 
                     <label className="flex items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition">
@@ -49,40 +48,38 @@ export default function AddCertificates() {
                     </label>
                 </div>
 
-                {/*  Certificates Title */}
+                {/* Project Title */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                         Certificates Title
+                     Edit   Project Title
                     </label>
                     <input
                         type="text"
-                        placeholder="Enter  Certificates title"
+                        placeholder="Enter project title"
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                     />
                 </div>
 
-                {/* About  Certificates */}
+                {/* About Project */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Add Pdf Certificates
+                      Edit  About Project
                     </label>
-                    <input
-                        type='file'
-                        name='file'
-                        accept='.pdf'
-                        required
+                    <textarea
+                        rows="4"
+                        placeholder="Write about your project..."
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-                    /> 
+                    ></textarea>
                 </div>
 
-                {/*  Certificates Link */}
+                {/* Project Link */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                         Certificates Link
+                     Edit   Project Link
                     </label>
                     <input
                         type="url"
-                        placeholder="https://your Certificates.com"
+                        placeholder="https://yourproject.com"
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                     />
                 </div>
@@ -92,7 +89,7 @@ export default function AddCertificates() {
                     type="submit"
                     className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition"
                 >
-                    Submit  Certificates
+                    Update Project
                 </button>
 
             </form>

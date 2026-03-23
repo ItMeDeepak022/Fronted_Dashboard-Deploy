@@ -23,7 +23,7 @@ export default function Sidebar() {
         <>
             {/* For mobile screen  */}
 
-             {
+            {
                 slider ?
 
                     <button className=' fixed  z-70 right-3 top-4' onClick={Sliders}  >
@@ -35,7 +35,7 @@ export default function Sidebar() {
                         <RxCrossCircled className='w-8 h-8 font-extrabold text-black md:hidden ' />
                     </button>
 
-            }  
+            }
 
             <nav className={`w-[70%] min-h-screen
                  fixed top-0
@@ -65,20 +65,21 @@ export default function Sidebar() {
                             </button>
                             {openDropdown === item && (
                                 <ul className="ml-4 mt-1 flex flex-col gap-1  ">
+{/* bg-slate-200 */}
+                                    <Link to={`/${item.toLowerCase()}/add`}>
+                                        <li onClick={Sliders} className="transition bg-red-700 hover:bg-slate-100 px-2 py-1 text-black rounded block ">
 
-
-                                    <li onClick={Sliders} className="transition hover:bg-slate-100 px-2 py-1 text-black rounded block bg-slate-200">
-                                        <Link
-                                            to={`/${item.toLowerCase()}/add`}>
                                             Add
-                                        </Link>
-                                    </li>
-                                    <li onClick={Sliders} className="transition hover:bg-slate-100 px-2 py-1 text-black rounded block bg-slate-200">
-                                        <Link
-                                            to={`/${item.toLowerCase()}/view`}>
+
+                                        </li>
+                                    </Link>
+                                    <Link to={`/${item.toLowerCase()}/view`}>
+                                        <li onClick={Sliders} className="transition hover:bg-slate-100 px-2 py-1 text-black rounded block bg-slate-200">
                                             View
-                                        </Link>
-                                    </li>
+
+                                        </li>
+                                    </Link>
+
 
                                 </ul>
                             )}
@@ -137,8 +138,8 @@ export default function Sidebar() {
                 </ul>
                 <div className="mt-auto p-3 border-t border-gray-700">
                     <p className="transition hover:bg-slate-300 bg-slate-200 px-5 py-2 rounded text-black text-center block">
-                          <Link to={'/'}>Logout</Link>
-                        </p>
+                        <Link to={'/'}>Logout</Link>
+                    </p>
                 </div>
             </nav>
         </>

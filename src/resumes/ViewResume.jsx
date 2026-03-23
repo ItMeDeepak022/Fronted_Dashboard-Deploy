@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 export default function ViewResume() {
     return (
@@ -51,7 +52,8 @@ export default function ViewResume() {
                                             <div className="flex justify-center gap-3">
 
                                                 <button className="px-3 py-1.5 text-sm bg-blue-500/90 text-white rounded-lg hover:scale-105 hover:bg-blue-600 transition">
-                                                    ✏️ Edit
+                                                    
+                                                    <Link to={'/resume/edit/1'}>✏️ Edit</Link>
                                                 </button>
 
                                                 <button className="px-3 py-1.5 text-sm bg-red-500/90 text-white rounded-lg hover:scale-105 hover:bg-red-600 transition">

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 export default function Viewskills() {
     return (
@@ -10,10 +11,10 @@ export default function Viewskills() {
                     {/* Header */}
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                            ⚙️ Skills  
+                            ⚙️ Skills
                         </h1>
 
-                         
+
                     </div>
 
                     {/* Desktop Table */}
@@ -46,7 +47,7 @@ export default function Viewskills() {
                                             <div className="flex justify-center gap-2">
 
                                                 <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
-                                                    Update
+                                                    <Link to={'/skills/edit/1'}>Update</Link>
                                                 </button>
 
                                                 <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">

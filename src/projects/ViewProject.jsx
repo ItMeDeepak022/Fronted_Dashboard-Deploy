@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 export default function ViewProject() {
     return (
@@ -48,7 +49,7 @@ export default function ViewProject() {
                     <div className="flex gap-3 p-2 sm:px-8 pb-6">
 
                         <button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition">
-                            ✏️ Edit
+                           <Link to={'/projects/edit/1'}>✏️ Edit </Link> 
                         </button>
 
                         <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition">
@@ -103,7 +104,7 @@ export default function ViewProject() {
                     <div className="flex gap-3 p-2 sm:px-8 pb-6">
 
                         <button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition">
-                            ✏️ Edit
+                            <Link to={'/projects/edit/1'}>✏️ Edit </Link> 
                         </button>
 
                         <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition">

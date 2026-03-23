@@ -18,6 +18,11 @@ import AddCertificates from './certificates/AddCertificates'
 import ViewCertificates from './certificates/ViewCertificates'
 import EditCertificates from './certificates/EditCertificates'
 import Login from './common/Login'
+import EditInternship from './internship/EditInternship'
+import EditProfile from './profileImg/EditProfile'
+import EditProject from './projects/EditProject'
+import EditResume from './resumes/EditResume'
+import Editskills from './skills/Editskills'
 
 
 createRoot(document.getElementById('root')).render(
@@ -27,33 +32,40 @@ createRoot(document.getElementById('root')).render(
          <Routes>
 
             {/* Login */}
+
             <Route path="/" element={<Login />} />
-            
+
 
             {/* Admin Layout */}
             <Route element={<Home />}>
 
 
                <Route path="dashboard" element={<Dashboard />} />
+
                {/* Profile */}
                <Route path="profile/add" element={<AddProfile />} />
                <Route path="profile/view" element={<ViewProfile />} />
+               <Route path="profile/edit/:id" element={<EditProfile/>} />
 
                {/* Resume */}
                <Route path="resume/add" element={<AddResume />} />
                <Route path="resume/view" element={<ViewResume />} />
+               <Route path="resume/edit/:id" element={<EditResume />} />
 
                {/* Skills */}
                <Route path="skills/add" element={<Addskills />} />
                <Route path="skills/view" element={<Viewskills />} />
+               <Route path="skills/edit/:id" element={<Editskills />} />
 
                {/* Internship */}
                <Route path="internship/add" element={<AddIntern />} />
                <Route path="internship/view" element={<ViewIntern />} />
+               <Route path="internship/edit/:id" element={<EditInternship />} />
 
                {/* Projects */}
                <Route path="projects/add" element={<AddProject />} />
                <Route path="projects/view" element={<ViewProject />} />
+               <Route path="projects/edit/:id" element={<EditProject />} />
 
                {/* Certificates */}
                <Route path="certificates/add" element={<AddCertificates />} />

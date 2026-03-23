@@ -1,6 +1,7 @@
 import React from 'react'
 import { CiEdit } from 'react-icons/ci'
 import { MdDelete } from 'react-icons/md'
+import { Link } from 'react-router'
 
 export default function ViewProfile() {
     return (
@@ -55,7 +56,7 @@ export default function ViewProfile() {
                                                     type="submit"
                                                     className="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-md text-xs sm:text-sm"
                                                 >
-                                                    Update
+                                                   <Link to={'/profile/edit/1'}>Edit</Link>
                                                 </button>
                                             </form>
 
