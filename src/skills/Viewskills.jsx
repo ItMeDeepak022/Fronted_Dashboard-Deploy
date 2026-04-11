@@ -12,7 +12,7 @@ export default function Viewskills() {
         axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-skills`)
             .then((res) => res.data)
             .then((finalRes) => {
-                console.log(finalRes);
+                // console.log(finalRes);
                 setskillData(finalRes.data)
                 setloading(false)
             })

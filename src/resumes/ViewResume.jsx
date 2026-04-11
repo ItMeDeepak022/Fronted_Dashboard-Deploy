@@ -7,6 +7,7 @@ export default function ViewResume() {
     let [resumedata, setresumedata] = useState('')
     let [path, setpath] = useState('')
     let [loading, setloading] = useState(false)
+    
     let getresumeData = (e) => {
         setloading(true)
         axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-resume`)
