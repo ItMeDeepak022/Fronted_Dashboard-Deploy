@@ -3,6 +3,7 @@ import { MdAdminPanelSettings } from 'react-icons/md'
 import { CiMenuFries } from "react-icons/ci";
 
 export default function Header() {
+    let fletter=localStorage.getItem("Fletter")
     return (
         <>
             <header className="sticky top-0  z-50 w-full bg-white text-black shadow-lg  ">
@@ -10,8 +11,8 @@ export default function Header() {
                     <div className="flex items-center justify-between">
                         <div className="flex  justify-center items-center space-x-3">
                             
-                            <div className=" hidden md:w-10 md:h-10 w-12 h-12 bg-blue-500 rounded-full md:flex items-center justify-center font-bold text-lg">
-                                A
+                            <div className=" hidden text-2xl text-white font-bold md:w-10 md:h-10 w-12 h-12 bg-blue-500 rounded-full md:flex items-center justify-center font-bold ">
+                                 {fletter}
                             </div>
                             <MdAdminPanelSettings className='w-12 h-12 md:hidden flex justify-center' />
                             <h1 className=" md:text-2xl text-[18px] text-center py-2 font-bold rounded-lg md:px-3 md:py-1 transition hover:bg-slate-100">Admin Dashboard</h1>

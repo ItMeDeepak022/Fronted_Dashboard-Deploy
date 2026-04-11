@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, NavLink, useNavigate } from 'react-router'
 import { MdAdminPanelSettings, MdCancel, MdDashboard } from "react-icons/md";
 import { CiMenuFries } from 'react-icons/ci';
 import { RxCrossCircled } from "react-icons/rx";
@@ -7,7 +7,7 @@ import { IoIosNotifications } from "react-icons/io";
 export default function Sidebar() {
     const [openDropdown, setOpenDropdown] = useState(null);
     let [slider, setslider] = useState(true)
-
+    let navigate = useNavigate()
     let Sliders = () => {
         setslider(!slider)
     }
@@ -16,6 +16,14 @@ export default function Sidebar() {
         setOpenDropdown(openDropdown === item ? null : item);
 
     };
+
+    let logout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('Fletter')
+        navigate('/')
+
+    }
+
     let siderBarlist = ['Profile', 'Resume', 'Skills', 'Internship', 'Projects', "Certificates"]
 
 
@@ -65,9 +73,9 @@ export default function Sidebar() {
                             </button>
                             {openDropdown === item && (
                                 <ul className="ml-4 mt-1 flex flex-col gap-1  ">
-{/* bg-slate-200 */}
+
                                     <Link to={`/${item.toLowerCase()}/add`}>
-                                        <li onClick={Sliders} className="transition bg-red-700 hover:bg-slate-100 px-2 py-1 text-black rounded block ">
+                                        <li onClick={Sliders} className="transition  bg-slate-200 hover:bg-slate-100 px-2 py-1 text-black rounded block ">
 
                                             Add
 
@@ -86,8 +94,11 @@ export default function Sidebar() {
                         </li>
                     ))}
                 </ul>
-                <div className="mt-auto p-3 border-t border-gray-700">
-                    <Link to="/" className="transition hover:bg-slate-300 bg-slate-200 px-5 py-2 rounded text-black text-center block">Logout</Link>
+                <div className=" cursor-pointer mt-auto p-3 border-t border-gray-700">
+                    <button className="cursor-pointer font-bold hover:bg-slate-300 bg-slate-200 w-full py-2 rounded text-black text-center block"
+                        onClick={logout}
+                    >Logout
+                    </button>
                 </div>
             </nav>
 
@@ -137,9 +148,10 @@ export default function Sidebar() {
                     ))}
                 </ul>
                 <div className="mt-auto p-3 border-t border-gray-700">
-                    <p className="transition hover:bg-slate-300 bg-slate-200 px-5 py-2 rounded text-black text-center block">
-                        <Link to={'/'}>Logout</Link>
-                    </p>
+                    <button className="cursor-pointer font-bold hover:bg-slate-300 bg-slate-200 w-full py-2 rounded text-black text-center block"
+                        onClick={logout}
+                    >Logout
+                    </button>
                 </div>
             </nav>
         </>

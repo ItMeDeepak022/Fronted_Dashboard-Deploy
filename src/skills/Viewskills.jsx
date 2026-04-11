@@ -1,9 +1,61 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function Viewskills() {
+    let [skillData, setskillData] = useState([])
+
+    let [loading, setloading] = useState(false)
+    let getskillData = (e) => {
+        setloading(true)
+        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-skills`)
+            .then((res) => res.data)
+            .then((finalRes) => {
+                console.log(finalRes);
+                setskillData(finalRes.data)
+                setloading(false)
+            })
+
+
+    }
+    useEffect(() => {
+        getskillData()
+    }, [])
+
+    let [loader, setloader] = useState(null)
+
+    let getId = (e) => {
+
+        let id = (e.target.value)
+        setloader(id)
+        let Isdelete = confirm("Are you sure to delete...")
+        if (Isdelete) {
+            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete-skill/${id}`)
+                .then((res) => res.data)
+                .then((finalRes) => {
+                    getskillData()
+                    setloader(null)
+                    toast.success(finalRes.message)
+
+                })
+        }
+        else {
+            setloader(null)
+        }
+    }
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen bg-blue-500">
+                <div className="w-15 h-15 rounded-full animate-spin border-8 border-solid border-white  border-t-transparent"></div>
+            </div>
+        );
+    }
+
     return (
         <>
+            <ToastContainer />
             <div className="min-h-screen bg-gray-100 p-4 sm:p-6 md:p-8">
 
                 <div className="max-w-5xl mx-auto">
@@ -18,83 +70,74 @@ export default function Viewskills() {
                     </div>
 
                     {/* Desktop Table */}
-                    <div className="hidden md:block bg-white rounded-xl shadow overflow-hidden">
+                    <div className="grid grid-cols-1 gap-0 bg-white rounded-xl shadow overflow-hidden">
 
                         <table className="w-full text-left">
 
                             <thead className="bg-gray-200">
                                 <tr>
-                                    <th className="p-4">Skill</th>
-                                    <th className="p-4">Level</th>
-                                    <th className="p-4 text-center">Actions</th>
+                                    <th className="p-5">Skill</th>
+                                    <th className="p-5">Level</th>
+                                    <th className="p-5">Description</th>
+                                    <th className="p-5 text-center">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
 
-                                {[1, 2, 3].map((item) => (
-                                    <tr key={item} className="border-t hover:bg-gray-50">
+                                {
+                                    skillData.length > 0 ?
+                                        skillData.map((obj, index) => {
+                                            let { skill, level, Description } = obj
+                                            return (
+                                                <tr key={index} className="border-t hover:bg-gray-50">
 
-                                        <td className="p-4 font-medium">React JS</td>
+                                                    <td className="sm:p-4  p-2 font-medium"> {skill} </td>
 
-                                        <td className="p-4">
-                                            <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">
-                                                Advanced
-                                            </span>
-                                        </td>
+                                                    <td className="sm:p-4  p-2">
+                                                        <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">
+                                                            {level}
+                                                        </span>
+                                                    </td>
 
-                                        <td className="p-4">
-                                            <div className="flex justify-center gap-2">
+                                                    <td className="sm:p-4  p-2 sm:block hidden">
+                                                        <span className="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">
+                                                            {Description}
+                                                        </span>
+                                                    </td>
+                                                    <td className="sm:p-4  p-2">
+                                                        <div className="flex  sm:flex-row flex-col items-center justify-center gap-2">
 
-                                                <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
-                                                    <Link to={'/skills/edit/1'}>Update</Link>
-                                                </button>
+                                                            <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+                                                                <Link to={`/skills/edit/${obj._id}`} state={obj}>Update</Link>
+                                                            </button>
 
-                                                <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
-                                                    Delete
-                                                </button>
+                                                            <button onClick={getId} value={obj._id} className="flex justify-center items-center gap-2 px-3 py-1.5 text-sm bg-red-500/90 text-white rounded-lg hover:scale-105 hover:bg-red-600 transition">
+                                                                Delete
+                                                                {
+                                                                    (loader === obj._id) && (
+                                                                        <div class="w-5 h-5 rounded-full animate-spin border-4 border-solid  border-white border-t-transparent shadow-md"></div>
+                                                                    )
+                                                                }
+                                                            </button>
 
-                                            </div>
-                                        </td>
+                                                        </div>
+                                                    </td>
 
-                                    </tr>
-                                ))}
+                                                </tr>
+                                            )
+                                        })
+                                        :
+                                        <tr aria-colspan={6}>No Data founds...</tr>
+
+                                }
 
                             </tbody>
 
                         </table>
                     </div>
 
-                    {/* Mobile Cards */}
-                    <div className="grid grid-cols-1 gap-4 md:hidden">
 
-                        {[1, 2, 3].map((item) => (
-                            <div key={item} className="bg-white rounded-xl shadow p-4">
-
-                                <h2 className="text-lg font-semibold text-gray-800">
-                                    React JS
-                                </h2>
-
-                                <p className="text-sm text-green-600 mb-3">
-                                    Advanced
-                                </p>
-
-                                <div className="flex gap-2">
-
-                                    <button className="flex-1 bg-blue-500 text-white py-2 rounded text-sm">
-                                        Update
-                                    </button>
-
-                                    <button className="flex-1 bg-red-500 text-white py-2 rounded text-sm">
-                                        Delete
-                                    </button>
-
-                                </div>
-
-                            </div>
-                        ))}
-
-                    </div>
 
                 </div>
             </div>
