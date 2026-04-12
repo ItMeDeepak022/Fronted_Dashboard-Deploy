@@ -98,7 +98,7 @@ export default function ViewProfile() {
                                                     {/* Profile */}
                                                     <td className="px-3 sm:px-6 py-3">
                                                         <img
-                                                            src={path + profileImg}
+                                                            src={profileImg}
                                                             alt="profile"
                                                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                                                         />

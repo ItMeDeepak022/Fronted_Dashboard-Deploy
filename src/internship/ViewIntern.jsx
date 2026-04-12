@@ -73,7 +73,7 @@ export default function ViewIntern() {
                                             {/* Internship Photo */}
                                             <div className="md:col-span-1 flex justify-center">
                                                 <img
-                                                    src={path + internImg}
+                                                    src={internImg}
                                                     alt="Internship"
                                                     className="w-full h-64 sm:object-fill object-center  object-contain   rounded-t-lg shadow-md"
                                                 />

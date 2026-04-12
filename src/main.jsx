@@ -23,6 +23,7 @@ import EditProfile from './profileImg/EditProfile'
 import EditProject from './projects/EditProject'
 import EditResume from './resumes/EditResume'
 import Editskills from './skills/Editskills'
+import ProtectedRoute from './Protected'
 
 
 createRoot(document.getElementById('root')).render(
@@ -37,7 +38,7 @@ createRoot(document.getElementById('root')).render(
 
 
             {/* Admin Layout */}
-            <Route element={<Home />}>
+            <Route element={<ProtectedRoute> <Home /> </ProtectedRoute>}>
 
 
                <Route path="dashboard" element={<Dashboard />} />
@@ -45,7 +46,7 @@ createRoot(document.getElementById('root')).render(
                {/* Profile */}
                <Route path="profile/add" element={<AddProfile />} />
                <Route path="profile/view" element={<ViewProfile />} />
-               <Route path="profile/edit/:id" element={<EditProfile/>} />
+               <Route path="profile/edit/:id" element={<EditProfile />} />
 
                {/* Resume */}
                <Route path="resume/add" element={<AddResume />} />

@@ -7,7 +7,7 @@ export default function ViewResume() {
     let [resumedata, setresumedata] = useState('')
     let [path, setpath] = useState('')
     let [loading, setloading] = useState(false)
-    
+
     let getresumeData = (e) => {
         setloading(true)
         axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-resume`)
@@ -95,6 +95,7 @@ export default function ViewResume() {
                                     resumedata.length > 0 ?
                                         resumedata.map((obj, index) => {
                                             let { resumeLetter, resumeTitle, uploadDate } = obj
+                                            let OnlyResumeName = resumeLetter.split("/").pop().split("-").pop();
                                             const date = new Date(uploadDate);
                                             const formattedDate = date.toLocaleDateString("en-GB");
                                             return (
@@ -105,7 +106,7 @@ export default function ViewResume() {
                                                     </td>
 
                                                     <td className="p-5 text-gray-600">
-                                                        {resumeLetter}
+                                                        {OnlyResumeName}
                                                     </td>
 
                                                     <td className="p-5 text-gray-500">
@@ -130,7 +131,7 @@ export default function ViewResume() {
                                                             </button>
 
                                                             <button className="px-3 py-1.5 text-sm bg-green-500/90 text-white rounded-lg hover:scale-105 hover:bg-green-600 transition">
-                                                                <a href={path + resumeLetter} download>
+                                                                <a href={resumeLetter} download>
                                                                     Download
                                                                 </a>
                                                             </button>

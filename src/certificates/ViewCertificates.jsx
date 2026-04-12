@@ -75,7 +75,7 @@ export default function ViewCertificates() {
                                     {/*  Certificates Image */}
                                     <div className="w-full h-56  md:h-86 relative">
                                         <img
-                                            src={path + certificateImg}
+                                            src={certificateImg}
                                             alt=" Certificates"
                                             className="w-full h-full object-fill"
                                         />
@@ -99,7 +99,7 @@ export default function ViewCertificates() {
                                         {/* Link */}
                                         <div className="pt-2">
                                             <a
-                                                href={path + certificatePdf}
+                                                href={certificatePdf}
                                                 className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg transition text-sm sm:text-base"
                                             >
                                                 🔗 View Live  Certificates

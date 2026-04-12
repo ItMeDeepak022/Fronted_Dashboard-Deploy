@@ -70,7 +70,7 @@ export default function ViewProject() {
                                     {/* Project Image */}
                                     <div className="w-full h-56  md:h-86 relative">
                                         <img
-                                            src={path + projectImg}
+                                            src={projectImg}
                                             alt="project"
                                             className="w-full h-full object-fill"
                                         />
