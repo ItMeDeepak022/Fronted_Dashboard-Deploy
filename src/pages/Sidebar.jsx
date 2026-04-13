@@ -55,12 +55,12 @@ export default function Sidebar() {
                     <IoIosNotifications className='text-[30px] text-black  transition hover:bg-slate-200    rounded' />
                 </div>
                 <ul className="flex justify-center flex-col gap-2">
-                    <li onClick={Sliders} className="w-[85%] transition hover:bg-slate-200 bg-slate-300 px-4 py-2 text-black mx-2 rounded block text-left" >
-                        <Link to={'/dashboard'}>
-                            Dashboard
-                        </Link>
+                  <Link to={'/dashboard'}>
+                        <li onClick={Sliders} className="w-[85%] transition hover:bg-slate-200 bg-slate-300 px-4 py-2 text-black mx-2 rounded block text-left" >
 
-                    </li>
+                            Dashboard
+                        </li>
+                    </Link>
                     {siderBarlist.map((item, index) => (
                         <li key={index}>
                             <button
@@ -110,14 +110,14 @@ export default function Sidebar() {
                     <MdAdminPanelSettings className='text-[62px] text-black font-bold' />
                 </div>
                 <ul className="flex justify-center flex-col gap-2">
-
                     <Link to={'/dashboard'}>
-                        <li className="w-[85%] transition hover:bg-slate-200 bg-slate-300 px-4 py-2 text-black mx-2 rounded block text-left" >
-                            Dashboard
+                        <li onClick={Sliders} className="w-[85%] transition hover:bg-slate-200 bg-slate-300 px-4 py-2 text-black mx-2 rounded block text-left" >
 
+                            Dashboard
                         </li>
                     </Link>
-                    
+
+
                     {siderBarlist.map((item, index) => (
                         <li key={index}>
                             <button
