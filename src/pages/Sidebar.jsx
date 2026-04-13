@@ -104,17 +104,20 @@ export default function Sidebar() {
 
             {/* For mobile screen end */}
 
+
             <nav className=" sticky top-0 left-0 md:w-full md:h-screen hidden text-white md:flex md:flex-col md:gap-6 md:shadow-lg md:bg-gray-150">
                 <div className="w-full bg-white py-[5px] flex items-center justify-center border-b border-gray-700">
                     <MdAdminPanelSettings className='text-[62px] text-black font-bold' />
                 </div>
                 <ul className="flex justify-center flex-col gap-2">
-                    <li className="w-[85%] transition hover:bg-slate-200 bg-slate-300 px-4 py-2 text-black mx-2 rounded block text-left" >
-                        <Link to={'/dashboard'}>
-                            Dashboard
-                        </Link>
 
-                    </li>
+                    <Link to={'/dashboard'}>
+                        <li className="w-[85%] transition hover:bg-slate-200 bg-slate-300 px-4 py-2 text-black mx-2 rounded block text-left" >
+                            Dashboard
+
+                        </li>
+                    </Link>
+                    
                     {siderBarlist.map((item, index) => (
                         <li key={index}>
                             <button

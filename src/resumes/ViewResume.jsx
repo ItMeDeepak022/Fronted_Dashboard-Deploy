@@ -161,13 +161,14 @@ export default function ViewResume() {
                                     let { resumeLetter, resumeTitle, uploadDate } = obj
                                     const date = new Date(uploadDate);
                                     const formattedDate = date.toLocaleDateString("en-GB");
+                                    let OnlyResumeName = resumeLetter.split("/").pop().split("-").pop();
                                     return (
                                         <div
                                             key={index}
                                             className="backdrop-blur-lg bg-white/70 border border-white/40 rounded-2xl shadow-lg p-5 hover:shadow-xl transition"
                                         >
                                             <h2 className="text-lg font-bold text-gray-800 mb-1">
-                                                {resumeLetter}
+                                                {OnlyResumeName}
                                             </h2>
 
                                             <p className="text-sm text-gray-600">

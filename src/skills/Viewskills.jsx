@@ -78,7 +78,7 @@ export default function Viewskills() {
                                 <tr>
                                     <th className="p-5">Skill</th>
                                     <th className="p-5">Level</th>
-                                    <th className="p-5">Description</th>
+                                    <th className="sm:block hidden p-5">Description</th>
                                     <th className="p-5 text-center">Actions</th>
                                 </tr>
                             </thead>
