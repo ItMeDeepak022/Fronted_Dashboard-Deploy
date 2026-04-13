@@ -42,6 +42,10 @@ export default function EditCertificates() {
         }
     }, [state])
 
+
+    let OnlycertificateImg =state.certificateImg.split("/").pop().split("-").pop();
+    let OnlycertificatePdf =state.certificatePdf.split("/").pop().split("-").pop();
+
     let [loader,setloader]=useState(false)
     let updateData = (e) => {
         setloader(true)
@@ -110,7 +114,7 @@ export default function EditCertificates() {
                         />
 
                     </label>
-                    <p className='text-center'>Old Img:{formData.certificateImg}</p>
+                    <p className='text-center'>Old Img:{OnlycertificateImg}</p>
                 </div>
 
                 {/*  Certificates Title */}
@@ -145,7 +149,7 @@ export default function EditCertificates() {
 
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
                     />
-                    <p className='text-center'>Old Certificate Pdf:{formData.certificatePdf}</p>
+                    <p className='text-center'>Old Certificate Pdf:{OnlycertificatePdf}</p>
                 </div>
 
 

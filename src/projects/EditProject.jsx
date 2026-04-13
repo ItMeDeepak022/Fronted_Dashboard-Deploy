@@ -38,11 +38,12 @@ export default function EditProject() {
         }
     }, [state])
 
+    let OnlyProjectImg = state.projectImg.split("/").pop().split("-").pop();
     let updateData = (e) => {
         e.preventDefault()
         let form = e.target;
         let formValue = new FormData(form)
-        
+
         axios.put(`https://my-portfolio-backend-2026.onrender.com/admin/edit-project/${formData.id}`, formValue)
             .then((res) => res.data)
             .then((finalRes) => {
@@ -104,7 +105,7 @@ export default function EditProject() {
                             name='projectImg'
                         />
                     </label>
-                    <p className='p-1'>Old ProjectImg :{formData.projectImg}</p>
+                    <p className='p-1 text-green-700 font-bold'>Old ProjectImg :{OnlyProjectImg}</p>
                 </div>
 
                 {/* Project Title */}

@@ -27,14 +27,16 @@ export default function EditInternship() {
     }, [state])
 
     let [loader, setloader] = useState(false)
-     
+
+    let OnlyinterImg =state.internImg.split("/").pop().split("-").pop();
+
 
     let updateData = (e) => {
         setloader(true)
         e.preventDefault()
         let form = e.target;
         let formValue = new FormData(form)
-        
+
         axios.put(`https://my-portfolio-backend-2026.onrender.com/admin/edit-intern/${formData.id}`, formValue)
             .then((res) => res.data)
             .then((finalRes) => {
@@ -78,11 +80,11 @@ export default function EditInternship() {
                         </div>
                         <input type="file" accept="image/*"
                             name='internImg'
-                            
+
                         />
 
                     </label>
-                    <p className='text-center'>old Img:{formData.internImg}</p>
+                    <p className='text-center'>old Img:{OnlyinterImg}</p>
                 </div>
 
                 {/* Right Side - Form Fields */}

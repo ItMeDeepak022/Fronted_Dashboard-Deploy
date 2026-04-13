@@ -38,6 +38,10 @@ export default function EditProfile() {
         }
     }, [state])
 
+    let OnlyProfilImg = state.profileImg.split("/").pop().split("-").pop();
+
+     
+
     let [loader,setloader]=useState(false)
     let submitData = (e) => {
         setloader(true)
@@ -111,7 +115,7 @@ export default function EditProfile() {
 
                         />
                         <div>
-                            old Img:{state.profileImg}
+                            old Img:{OnlyProfilImg}
                         </div>
                     </label>
                     <div className="mt-4">

@@ -28,6 +28,8 @@ export default function EditResume() {
             )
         }
     }, [state])
+
+    let OnlyResumeLetter = state.resumeLetter.split("/").pop().split("-").pop();
     let [loader,setloader]=useState(false)
 
     let updateResume = (e) => {
@@ -68,7 +70,7 @@ export default function EditResume() {
                     < form onSubmit={updateResume} className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8">
 
                         {/* LEFT: Upload */}
-                        <label className="border-2 border-dashed border-indigo-300 rounded-lg p-6 sm:p-10 text-center bg-indigo-50 hover:bg-indigo-100 transition cursor-pointer flex flex-col items-center justify-center">
+                        <label  className="relative border-2 border-dashed border-indigo-300 rounded-lg p-6 sm:p-10 text-center bg-indigo-50 hover:bg-indigo-100 transition cursor-pointer flex flex-col items-center justify-center">
 
 
 
@@ -78,7 +80,7 @@ export default function EditResume() {
                                 name='resumeLetter'
 
                             />
-                            <p className='p-1'>old resume :{formData.resumeLetter}</p>
+                            <p className='absolute left-[17.5%] top-[55%] p-1'>old resume :{OnlyResumeLetter}</p>
 
                         </label>
 
