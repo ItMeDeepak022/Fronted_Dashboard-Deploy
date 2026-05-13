@@ -88,7 +88,7 @@ export default function Login() {
         <>
             <ToastContainer />
             {
-                show ?
+                show && (
 
                     // login form
 
@@ -156,95 +156,93 @@ export default function Login() {
                                     </button>
                                 </form>
 
-                                <p className="cursor-pointer underline flex justify-center gap-3 text-center text-gray-600 mt-4 pb-5  text-sm" onClick={showLoginSignUp}>
+                                {/* <p className="cursor-pointer underline flex justify-center gap-3 text-center text-gray-600 mt-4 pb-5  text-sm" onClick={showLoginSignUp}>
                                     Don't have an account? <p className="text-blue-600 hover:underline">Sign Up Now</p>
-                                </p>
+                                </p> */}
                             </div>
                         </div>
                     </div>
+                )
+                // SignUp form
 
-                    :
+                // <div className="flex items-center justify-center min-h-screen bg-white">
+                //     <div className="mx-auto  shadow-lg rounded-lg   grid grid-cols-1 md:grid-cols-2 ">
+                //         {/* Left Side - Welcome Section */}
+                //         <div className="rounded-tl-lg rounded-bl-lg bg-gradient-to-br from-blue-600 to-purple-700 p-12 sm:flex flex-col justify-center items-center text-white hidden">
+                //             <img
+                //                 src="https://sales.webtel.in/images/Login-page-character1.png"
+                //                 alt="Admin Dashboard"
+                //                 className="w-64 h-64 object-cover rounded-lg mb-6 "
+                //             />
+                //             <h2 className="text-4xl font-bold text-center mb-4">Welcome to Admin Dashboard</h2>
+                //             <p className="text-center text-blue-100 text-lg">Manage your Portfolio efficiently</p>
+                //         </div>
 
-                    // SignUp form
+                //         {/* Right Side - Login Form */}
+                //         <div className="md:rounded-tr-lg md:rounded-br-lg rounded-lg shadow-lg  bg-slate-200  md:p-12 flex flex-col justify-center sm:m-0 m-3">
 
-                    <div className="flex items-center justify-center min-h-screen bg-white">
-                        <div className="mx-auto  shadow-lg rounded-lg   grid grid-cols-1 md:grid-cols-2 ">
-                            {/* Left Side - Welcome Section */}
-                            <div className="rounded-tl-lg rounded-bl-lg bg-gradient-to-br from-blue-600 to-purple-700 p-12 sm:flex flex-col justify-center items-center text-white hidden">
-                                <img
-                                    src="https://sales.webtel.in/images/Login-page-character1.png"
-                                    alt="Admin Dashboard"
-                                    className="w-64 h-64 object-cover rounded-lg mb-6 "
-                                />
-                                <h2 className="text-4xl font-bold text-center mb-4">Welcome to Admin Dashboard</h2>
-                                <p className="text-center text-blue-100 text-lg">Manage your Portfolio efficiently</p>
-                            </div>
+                //             <div className='w-full flex flex-col items-center justify-center sm:hidden'>
+                //                 <img
+                //                     src="https://sales.webtel.in/images/Login-page-character1.png"
+                //                     alt="Admin Dashboard"
+                //                     className="w-full h-full object-cover"
+                //                 />
+                //                 <h1 className="text-2xl font-bold text-blue-300 mb-6 text-center"> Welcome to Dashboard</h1>
+                //             </div>
+                //             <h1 className="sm:text-5xl text-3xl font-bold text-gray-800 mb-6 text-center">Sign Up Now</h1>
 
-                            {/* Right Side - Login Form */}
-                            <div className="md:rounded-tr-lg md:rounded-br-lg rounded-lg shadow-lg  bg-slate-200  md:p-12 flex flex-col justify-center sm:m-0 m-3">
+                //             <form onSubmit={submitData} className="space-y-4 p-5">
+                //                 <div>
+                //                     <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                //                     <input
+                //                         name='name'
+                //                         required
+                //                         type="text"
+                //                         placeholder="Enter your name"
+                //                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                //                     />
+                //                 </div>
+                //                 <div>
+                //                     <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                //                     <input
+                //                         type="email"
+                //                         name='email'
+                //                         required
+                //                         placeholder="Enter your email"
+                //                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                //                     />
+                //                 </div>
+                //                 <div>
+                //                     <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                //                     <input
+                //                         required
+                //                         type="password"
+                //                         name='password'
+                //                         placeholder="Enter your password"
+                //                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                //                     />
+                //                 </div>
 
-                                <div className='w-full flex flex-col items-center justify-center sm:hidden'>
-                                    <img
-                                        src="https://sales.webtel.in/images/Login-page-character1.png"
-                                        alt="Admin Dashboard"
-                                        className="w-full h-full object-cover"
-                                    />
-                                    <h1 className="text-2xl font-bold text-blue-300 mb-6 text-center"> Welcome to Dashboard</h1>
-                                </div>
-                                <h1 className="sm:text-5xl text-3xl font-bold text-gray-800 mb-6 text-center">Sign Up Now</h1>
+                //                 <button
+                //                     type="submit"
+                //                     className="w-full  flex justify-center items-center gap-8  bg-gradient-to-br from-blue-600 to-purple-700 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                //                 >
+                //                     Sign In
+                //                     {
+                //                         loader && (
+                //                             <div class="w-7 h-7 rounded-full animate-spin border-4 border-solid  border-white border-t-transparent shadow-md"></div>
+                //                         )
+                //                     }
 
-                                <form onSubmit={submitData} className="space-y-4 p-5">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                                        <input
-                                            name='name'
-                                            required
-                                            type="text"
-                                            placeholder="Enter your name"
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                        <input
-                                            type="email"
-                                            name='email'
-                                            required
-                                            placeholder="Enter your email"
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                                        <input
-                                            required
-                                            type="password"
-                                            name='password'
-                                            placeholder="Enter your password"
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                        />
-                                    </div>
+                //                 </button>
+                //             </form>
 
-                                    <button
-                                        type="submit"
-                                        className="w-full  flex justify-center items-center gap-8  bg-gradient-to-br from-blue-600 to-purple-700 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
-                                    >
-                                        Sign In
-                                        {
-                                            loader && (
-                                                <div class="w-7 h-7 rounded-full animate-spin border-4 border-solid  border-white border-t-transparent shadow-md"></div>
-                                            )
-                                        }
-
-                                    </button>
-                                </form>
-
-                                <p className="cursor-pointer underline flex justify-center gap-3 text-center text-gray-600 mt-4 pb-5  text-sm" onClick={showLoginSignUp}>
-                                    Don't have an account? <p className="text-blue-600 hover:underline">Login Now</p>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                //             <p className="cursor-pointer underline flex justify-center gap-3 text-center text-gray-600 mt-4 pb-5  text-sm" onClick={showLoginSignUp}>
+                //                 Don't have an account? <p className="text-blue-600 hover:underline">Login Now</p>
+                //             </p>
+                //         </div>
+                //     </div>
+                // </div>
             }
 
 

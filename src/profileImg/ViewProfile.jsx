@@ -54,13 +54,8 @@ export default function ViewProfile() {
         getprofileData()
     }, [])
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen bg-blue-500">
-                <div className="w-15 h-15 rounded-full animate-spin border-8 border-solid border-white  border-t-transparent"></div>
-            </div>
-        );
-    }
+    
+
     return (
         <>
             <ToastContainer />

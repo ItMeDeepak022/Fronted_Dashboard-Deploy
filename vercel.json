@@ -1,5 +1,14 @@
 {
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "redirects": [
+    {
+      "source": "/portfolio",
+      "destination": "https://my-dynamic-portfolio-2026.vercel.app/",
+      "permanent": false
+    }
   ]
 }
+
+ 
