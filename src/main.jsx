@@ -38,7 +38,7 @@ createRoot(document.getElementById('root')).render(
 
 
             {/* Admin Layout */}
-            <Route element={<ProtectedRoute> <Home /> </ProtectedRoute>}>
+            <Route element={<ProtectedRoute> <Home/> </ProtectedRoute>}>
 
 
                <Route path="dashboard" element={<Dashboard />} />
