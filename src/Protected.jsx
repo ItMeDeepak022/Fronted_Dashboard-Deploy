@@ -49,8 +49,8 @@ export default function ProtectedRoute({ children }) {
     if (isValid === null) {
         return (
             <div className="max-w-full min-h-screen flex justify-center items-center bg-black">
-                <div class="sm:w-8 sm:h-8 rounded-full animate-spin
-                    border-5 border-solid border-white border-t-transparent"></div>
+                <div class="sm:w-15 sm:h-15 w-8 h-8  rounded-full animate-spin
+                    sm:border-7 border-5 border-solid border-white border-t-transparent"></div>
             </div>
         );
     }
