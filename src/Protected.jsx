@@ -47,7 +47,12 @@ export default function ProtectedRoute({ children }) {
     }, []);
 
     if (isValid === null) {
-        return <h1>Loading...</h1>;
+        return (
+            <div className="max-w-full min-h-screen flex justify-center items-center bg-black">
+                <div class="sm:w-8 sm:h-8 rounded-full animate-spin
+                    border-5 border-solid border-white border-t-transparent"></div>
+            </div>
+        );
     }
 
     return isValid
