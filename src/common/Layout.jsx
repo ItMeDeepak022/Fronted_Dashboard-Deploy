@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router';
-import Sidebar from '../pages/Sidebar';
-import Header from './Header';
-import Footer from './Footer';
+import React from 'react'
+ 
+import { Outlet } from 'react-router'
+import Sidebar from '../pages/Sidebar'
+import Header from './Header'
+import Footer from './Footer'
+ 
 
 export default function Layout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+    return (
+        <div className='grid md:grid-cols-[10%_90%]  min-h-screen'>
 
-  return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[260px_1fr] bg-slate-50 text-slate-800">
-      {/* 1. Sidebar Navigation Column */}
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+             
+               <Sidebar/>
+            
 
-      {/* 2. Main Content & Header/Footer Column */}
-      <div className="flex flex-col min-w-full min-h-screen">
-        {/* Sticky Header */}
-        <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
+            <div className='flex-1  h-full'>
+                {/* header  */}
+                <Header/>
 
-        {/* Dynamic Page Content */}
-        <main className="flex-1 min-w-0">
-          <Outlet />
-        </main>
+                {/* outler */}
+                <Outlet/>
 
-        {/* Footer */}
-        <Footer />
-      </div>
-    </div>
-  );
+
+                {/* footer */}
+                 <Footer/>  
+            </div>
+
+
+        </div>
+    )
 }
