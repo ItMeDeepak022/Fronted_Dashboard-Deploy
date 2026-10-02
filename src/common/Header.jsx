@@ -6,7 +6,7 @@ export default function Header() {
     let fletter=localStorage.getItem("Fletter")
     return (
         <>
-            <header className="sticky top-0  z-50 w-full bg-white text-black shadow-lg  ">
+            <header className="sticky top-0  z-50 w-full bg-white text-black border-l-1 border-l-gray-200 border-b-1 border-b-gray-200 shadow-[0_5px_5px_-5px_rgba(0,0,0,0.3)]">
                 <div className="max-w-7xl mx-auto md:px-0 md:py-4 px-2 py-2">
                     <div className="flex items-center justify-between">
                         <div className="flex  justify-center items-center space-x-3">
