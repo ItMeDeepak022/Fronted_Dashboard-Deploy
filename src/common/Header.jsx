@@ -1,6 +1,6 @@
 import React from 'react'
 import { MdAdminPanelSettings } from 'react-icons/md'
-import { CiMenuFries } from "react-icons/ci";
+ 
 
 export default function Header() {
     let fletter=localStorage.getItem("Fletter")

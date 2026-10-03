@@ -31,8 +31,9 @@ export default function Sidebar({ collaps }) {
     };
 
     let logout = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('Fletter')
+        // localStorage.removeItem('token')
+        // localStorage.removeItem('Fletter') 
+        localStorage.clear();
         navigate('/')
 
     }

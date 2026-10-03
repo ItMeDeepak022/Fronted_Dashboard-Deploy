@@ -24,11 +24,18 @@ import EditProject from './projects/EditProject'
 import EditResume from './resumes/EditResume'
 import Editskills from './skills/Editskills'
 import ProtectedRoute from './Protected'
+import { ToastContainer } from 'react-toastify'
 
 
 createRoot(document.getElementById('root')).render(
    <>
-
+      <ToastContainer
+         position="bottom-center"
+         autoClose={3000}
+         newestOnTop
+         closeOnClick
+         pauseOnHover
+      />
       <BrowserRouter>
          <Routes>
 
@@ -39,9 +46,9 @@ createRoot(document.getElementById('root')).render(
 
             {/* Admin Layout */}
             <Route element={
-               <ProtectedRoute> 
-                  <Home/>  
-            </ProtectedRoute>}>
+               <ProtectedRoute>
+                  <Home />
+               </ProtectedRoute>}>
 
 
                <Route path="dashboard" element={<Dashboard />} />
