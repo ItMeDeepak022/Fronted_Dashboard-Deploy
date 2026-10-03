@@ -22,7 +22,7 @@ export default function Layout() {
          ${collaps ? "lg:grid-cols-[8%_auto] md:grid-cols-[15%_auto]" : "lg:grid-cols-[15%_auto] md:grid-cols-[25%_auto]"}  min-h-screen `}>
 
 
-            <div className='relative'>
+            <div className='relative md:block hidden'>
 
                 {
                     collaps ?
