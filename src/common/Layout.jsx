@@ -22,13 +22,13 @@ export default function Layout() {
          ${collaps ? "lg:grid-cols-[8%_auto] md:grid-cols-[15%_auto]" : "lg:grid-cols-[15%_auto] md:grid-cols-[25%_auto]"}  min-h-screen `}>
 
 
-            <div className='relative md:block hidden'>
+            <div className='relative '>
 
                 {
                     collaps ?
-                        <Columns3Cog onClick={colOn} size={18} className='fixed transition-all duration-500 ease-in-out top-5 md:left-23 lg:left-25 z-10 text-black cursor-pointer' />
+                        <Columns3Cog onClick={colOn} size={18} className='fixed md:block hidden transition-all duration-500 ease-in-out top-5 md:left-23 lg:left-25 z-10 text-black cursor-pointer' />
                         :
-                        <Columns2 onClick={colOn} size={18} className='fixed transition-all duration-500 ease-in-out top-5 md:left-40    lg:left-50 z-10 text-black cursor-pointer' />
+                        <Columns2 onClick={colOn} size={18} className='fixed transition-all md:block hidden duration-500 ease-in-out top-5 md:left-40    lg:left-50 z-10 text-black cursor-pointer' />
                 }
 
 
