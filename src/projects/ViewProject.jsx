@@ -65,7 +65,7 @@ export default function ViewProject() {
                         data.map((obj, index) => {
                             let { projectTitle, aboutProject, projectLink, projectImg } = obj
                             return (
-                                <div className="w-full  max-w-4xl bg-white shadow-lg rounded-2xl overflow-hidden">
+                                <div key={obj._id || index} className="w-full  max-w-4xl bg-white shadow-lg rounded-2xl overflow-hidden">
 
                                     {/* Project Image */}
                                     <div className="w-full h-56  md:h-86 relative">

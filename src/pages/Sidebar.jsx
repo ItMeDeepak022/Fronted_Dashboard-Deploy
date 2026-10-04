@@ -5,6 +5,7 @@ import { CiMenuFries } from 'react-icons/ci';
 import { RxCrossCircled } from "react-icons/rx";
 import { IoIosNotifications } from "react-icons/io";
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import {
     User,
     FileText,
@@ -26,6 +27,7 @@ export default function Sidebar({ collaps }) {
     const [openDropdown, setOpenDropdown] = useState(null);
     let [slider, setslider] = useState(true);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     let navigate = useNavigate();
 
     let Sliders = () => {
@@ -40,11 +42,32 @@ export default function Sidebar({ collaps }) {
         setShowLogoutModal(true);
     };
 
-    const handleConfirmLogout = () => {
+    // http://localhost:8000/admin/logout-all-devices
+    const handleConfirmLogout = async () => {
+        setIsLoggingOut(true);
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            try {
+                await axios.post(
+                    'https://my-portfolio-backend-2026.onrender.com/admin/logout-all-devices',
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+            } catch (error) {
+                console.error('Logout error:', error.response?.data?.message || error.message);
+            }
+        }
+
         window.dispatchEvent(new Event('session_logout'));
-        sessionStorage.setItem('session_expired', 'true');
+        sessionStorage.removeItem('session_expired');
         toast.dismiss();
         localStorage.clear();
+        setIsLoggingOut(false);
         setShowLogoutModal(false);
         navigate('/');
     };
@@ -321,7 +344,7 @@ export default function Sidebar({ collaps }) {
 
                         {/* Subtitle */}
                         <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mb-5 max-w-[270px] mx-auto">
-                            Are you sure you want to end your current session? You will be redirected to the login screen.
+                            Are you sure you want to log out? You will be redirected to the login screen.
                         </p>
 
                         {/* Action Buttons */}
@@ -329,16 +352,18 @@ export default function Sidebar({ collaps }) {
                             <button
                                 type="button"
                                 onClick={() => setShowLogoutModal(false)}
-                                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold py-2.5 px-4 rounded-xl transition cursor-pointer"
+                                disabled={isLoggingOut}
+                                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold py-2.5 px-4 rounded-xl transition cursor-pointer disabled:opacity-50"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 onClick={handleConfirmLogout}
-                                className="w-full bg-rose-600 hover:bg-rose-700 active:scale-[0.98] text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-sm cursor-pointer"
+                                disabled={isLoggingOut}
+                                className="w-full bg-rose-600 hover:bg-rose-700 active:scale-[0.98] disabled:opacity-75 text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-sm cursor-pointer"
                             >
-                                Yes, Log Out
+                                {isLoggingOut ? "Logging out..." : "Yes, Log Out"}
                             </button>
                         </div>
                     </div>

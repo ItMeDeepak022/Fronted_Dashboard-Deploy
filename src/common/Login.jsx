@@ -38,7 +38,7 @@ export default function Login() {
 
             let firtletter = obj.email.charAt(0).toUpperCase()
             //   http://localhost:8000/admin/login  for local server
-            axios.post(`https://my-portfolio-backend-2026.onrender.com/admin/login`, obj)
+            axios.post(`https://my-portfolio-backend-2026.onrender.com/admin/login`, obj) 
                 .then((res) => res.data)
                 .then((finalRes) => {
                     // console.log(finalRes);
