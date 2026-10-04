@@ -1,10 +1,7 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-import { toast, ToastContainer } from 'react-toastify'
-
-
-
+import { toast } from 'react-toastify'
 
 export default function Login() {
 
@@ -13,6 +10,12 @@ export default function Login() {
     let [show, setshow] = useState(true)
 
     let [loader, setloader] = useState(false)
+
+    useEffect(() => {
+        // Cleanly dismiss any lingering toasts (e.g. from refresh or dashboard)
+        toast.dismiss();
+        sessionStorage.removeItem("session_expired");
+    }, []);
 
     let showLoginSignUp = () => {
         setshow(!show)
@@ -43,6 +46,9 @@ export default function Login() {
                     if (finalRes.status) {
                         localStorage.setItem('token', finalRes.token)
                         localStorage.setItem('Fletter', firtletter)
+                        const nameFromEmail = obj.email.split('@')[0];
+                        const formattedAdminName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
+                        localStorage.setItem('adminName', finalRes.name || formattedAdminName);
                         toast.success(finalRes.message)
                         e.target.reset()
                         setTimeout(() => {
@@ -86,17 +92,16 @@ export default function Login() {
 
     return (
         <>
-            <ToastContainer />
             {
                 show && (
 
                     // login form
 
-                    <div className="flex items-center justify-center min-h-screen bg-none">
-                        <div className="mx-auto  shadow-lg rounded-lg   grid grid-cols-1 md:grid-cols-2 ">
+                    <div className="flex items-center justify-center md:min-h-screen h-[90vh]">
+                        <div className="mx-auto grid grid-cols-1 md:grid-cols-2 ">
                             {/* Left Side - Welcome Section */}
 
-                            <div className="rounded-tl-lg rounded-bl-lg bg-gradient-to-br from-blue-600 to-purple-700 p-12 sm:flex flex-col justify-center items-center text-white hidden">
+                            <div className="rounded-tl-lg rounded-bl-lg md:rounded-none rounded-[10px] bg-gradient-to-br from-blue-600 to-purple-700 p-12 sm:flex flex-col justify-center items-center text-white hidden">
                                 <img
                                     src="https://sales.webtel.in/images/Login-page-character1.png"
                                     alt="Admin Dashboard"
@@ -107,7 +112,7 @@ export default function Login() {
                             </div>
 
                             {/* Right Side - Login Form */}
-                            <div className="md:rounded-tr-lg md:rounded-br-lg   shadow-lg  bg-slate-200  md:p-12 flex flex-col justify-center sm:m-0 m-3">
+                            <div className="rounded-tr-lg rounded-br-lg md:rounded-none rounded-[10px]   shadow-lg  bg-slate-200  md:p-12 flex flex-col justify-center sm:m-0 m-3">
 
                                 <div className='w-full flex flex-col items-center justify-center sm:hidden'>
                                     <img

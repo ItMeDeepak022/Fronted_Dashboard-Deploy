@@ -4,6 +4,7 @@ import { MdAdminPanelSettings, MdCancel, MdDashboard } from "react-icons/md";
 import { CiMenuFries } from 'react-icons/ci';
 import { RxCrossCircled } from "react-icons/rx";
 import { IoIosNotifications } from "react-icons/io";
+import { toast } from 'react-toastify';
 import {
     User,
     FileText,
@@ -18,27 +19,35 @@ import {
     Eye,
     Bell,
     UserShield,
+    LogOut,
 } from "lucide-react";
+
 export default function Sidebar({ collaps }) {
     const [openDropdown, setOpenDropdown] = useState(null);
-    let [slider, setslider] = useState(true)
-    let navigate = useNavigate()
+    let [slider, setslider] = useState(true);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    let navigate = useNavigate();
+
     let Sliders = () => {
-        setslider(!slider)
-    }
+        setslider(!slider);
+    };
 
     const toggleDropdown = (item) => {
         setOpenDropdown(openDropdown === item ? null : item);
-
     };
 
     let logout = () => {
-        // localStorage.removeItem('token')
-        // localStorage.removeItem('Fletter') 
-        localStorage.clear();
-        navigate('/')
+        setShowLogoutModal(true);
+    };
 
-    }
+    const handleConfirmLogout = () => {
+        window.dispatchEvent(new Event('session_logout'));
+        sessionStorage.setItem('session_expired', 'true');
+        toast.dismiss();
+        localStorage.clear();
+        setShowLogoutModal(false);
+        navigate('/');
+    };
 
 
 
@@ -82,17 +91,19 @@ export default function Sidebar({ collaps }) {
         <>
             {/* ================= MOBILE SIDEBAR ================= */}
 
+           
+
             {slider ? (
                 <button
-                    className="fixed z-[70] right-3 top-4 md:hidden cursor-pointer transition-all duration-500"
+                    className="fixed z-[70] right-4 top-4 md:hidden cursor-pointer transition-all duration-300 p-1 rounded-lg hover:bg-gray-100 flex items-center justify-center"
                     onClick={Sliders}
                     aria-label="Open menu"
                 >
-                    <CiMenuFries className="w-7 h-7 font-extrabold text-black" />
+                    <CiMenuFries className="w-7.5 h-7 font-extrabold text-black" />
                 </button>
             ) : (
                 <button
-                    className="fixed z-[70] right-3 top-4 md:hidden cursor-pointer transition-all duration-500"
+                    className="fixed z-[70] right-4 top-4 md:hidden cursor-pointer transition-all duration-300 p-1 rounded-lg hover:bg-gray-100 flex items-center justify-center"
                     onClick={Sliders}
                     aria-label="Close menu"
                 >
@@ -292,6 +303,47 @@ export default function Sidebar({ collaps }) {
                 </div>
 
             </nav>
+            {/* ================= NORMAL & PROFESSIONAL LOGOUT POPUP MODAL ================= */}
+            {showLogoutModal && (
+                <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
+                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-200/80 max-w-sm w-full p-6 text-center relative overflow-hidden transition-all duration-200">
+                        
+
+                        {/* Icon */}
+                        <div className="w-13 h-13 rounded-2xl bg-rose-50 border border-rose-200/70 text-rose-600 flex items-center justify-center mx-auto mb-3.5 shadow-2xs">
+                            <LogOut className="w-6 h-6 stroke-[2.2]" />
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-lg font-bold text-slate-900 mb-1.5 tracking-tight">
+                            Confirm Logout
+                        </h3>
+
+                        {/* Subtitle */}
+                        <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mb-5 max-w-[270px] mx-auto">
+                            Are you sure you want to end your current session? You will be redirected to the login screen.
+                        </p>
+
+                        {/* Action Buttons */}
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setShowLogoutModal(false)}
+                                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold py-2.5 px-4 rounded-xl transition cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleConfirmLogout}
+                                className="w-full bg-rose-600 hover:bg-rose-700 active:scale-[0.98] text-white text-sm font-semibold py-2.5 px-4 rounded-xl transition shadow-sm cursor-pointer"
+                            >
+                                Yes, Log Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

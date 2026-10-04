@@ -25,12 +25,13 @@ import EditResume from './resumes/EditResume'
 import Editskills from './skills/Editskills'
 import ProtectedRoute from './Protected'
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 createRoot(document.getElementById('root')).render(
    <>
       <ToastContainer
-         position="bottom-center"
+         position="top-left"
          autoClose={3000}
          newestOnTop
          closeOnClick
