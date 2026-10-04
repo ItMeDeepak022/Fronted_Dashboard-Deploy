@@ -92,7 +92,7 @@ export default function Login() {
 
                     // login form
 
-                    <div className="flex items-center justify-center min-h-screen bg-white">
+                    <div className="flex items-center justify-center min-h-screen bg-none">
                         <div className="mx-auto  shadow-lg rounded-lg   grid grid-cols-1 md:grid-cols-2 ">
                             {/* Left Side - Welcome Section */}
 
@@ -107,7 +107,7 @@ export default function Login() {
                             </div>
 
                             {/* Right Side - Login Form */}
-                            <div className="md:rounded-tr-lg md:rounded-br-lg rounded-lg shadow-lg  bg-slate-200  md:p-12 flex flex-col justify-center sm:m-0 m-3">
+                            <div className="md:rounded-tr-lg md:rounded-br-lg   shadow-lg  bg-slate-200  md:p-12 flex flex-col justify-center sm:m-0 m-3">
 
                                 <div className='w-full flex flex-col items-center justify-center sm:hidden'>
                                     <img

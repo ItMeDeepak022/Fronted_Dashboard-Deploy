@@ -16,6 +16,8 @@ import {
     UserRoundPlus,
     View,
     Eye,
+    Bell,
+    UserShield,
 } from "lucide-react";
 export default function Sidebar({ collaps }) {
     const [openDropdown, setOpenDropdown] = useState(null);
@@ -106,10 +108,10 @@ export default function Sidebar({ collaps }) {
         transition-all duration-500 z-[60]
         md:hidden flex flex-col bg-white shadow-lg`}
             >
-                <div className="shrink-0 w-full bg-white py-[5px] flex justify-around gap-9 items-center border-b-1 border-b-gray-200">
-                    <MdAdminPanelSettings className="text-[65px] text-black font-bold" />
+                <div className="shrink-0 w-full bg-white py-[15px] flex justify-around gap-9 items-center border-b-1 border-b-gray-200">
+                    <UserShield size={35} className="text-black font-bold" />
 
-                    <IoIosNotifications className="text-[30px] text-black transition hover:bg-slate-200 rounded cursor-pointer" />
+                    <Bell className="text-[30px] text-black transition hover:bg-slate-200 rounded cursor-pointer" />
                 </div>
 
                 <ul className="flex-1 min-h-0 overflow-y-scroll scroll-smooth flex flex-col gap-2 py-3 px-4 ">
@@ -172,7 +174,7 @@ export default function Sidebar({ collaps }) {
                 </ul>
 
                 {/* Logout */}
-                <div className="shrink-0 mt-auto p-3 border-t-1 border-t-gray-200 bg-white">
+                <div className=" fixed bottom-1 w-57.5 shrink-0 mt-auto p-3 border-t-1 border-t-gray-200 bg-white">
                     <button
                         className="cursor-pointer font-bold hover:bg-slate-200 bg-slate-100 w-full py-2 rounded-[25px] text-black text-center block"
                         onClick={logout}
