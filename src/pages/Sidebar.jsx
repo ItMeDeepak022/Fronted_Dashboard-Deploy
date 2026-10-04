@@ -6,6 +6,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { IoIosNotifications } from "react-icons/io";
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { broadcastAuthEvent } from '../common/authSync';
 import {
     User,
     FileText,
@@ -55,7 +56,8 @@ export default function Sidebar({ collaps }) {
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
-                        }
+                        },
+                        timeout: 5000
                     }
                 );
             } catch (error) {
@@ -63,13 +65,19 @@ export default function Sidebar({ collaps }) {
             }
         }
 
+        // Broadcast to other tabs immediately
+        broadcastAuthEvent({
+            type: 'AUTH_LOGOUT',
+            message: 'You have logged out from another tab/device.'
+        });
+
         window.dispatchEvent(new Event('session_logout'));
-        sessionStorage.removeItem('session_expired');
-        toast.dismiss();
+        sessionStorage.clear();
         localStorage.clear();
+        toast.dismiss();
         setIsLoggingOut(false);
         setShowLogoutModal(false);
-        navigate('/');
+        window.location.href = '/';
     };
 
 

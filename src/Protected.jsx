@@ -1,16 +1,30 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Navigate } from "react-router";
 import { toast } from "react-toastify";
 import { ShieldAlert, Clock, LogIn } from "lucide-react";
+import { broadcastAuthEvent, subscribeAuthEvents } from "./common/authSync";
 
 export default function ProtectedRoute({ children }) {
     const [isValid, setIsValid] = useState(null);
     const [sessionExpired, setSessionExpired] = useState(false);
     const [countdown, setCountdown] = useState(3);
 
+    const sessionExpiredRef = useRef(false);
+    const isVerifyingRef = useRef(false);
+    const timerRef = useRef(null);
+
     // Trigger session expired state with top-center toast & modal
     const handleSessionExpired = (message = "Session expired. Please login again.") => {
+        // Prevent duplicate trigger if already in session expired state
+        if (sessionExpiredRef.current) return;
+        sessionExpiredRef.current = true;
+
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+
         // Set flag so all background components know session is over
         sessionStorage.setItem("session_expired", "true");
         window.dispatchEvent(new Event("session_logout"));
@@ -20,13 +34,19 @@ export default function ProtectedRoute({ children }) {
 
         localStorage.clear();
 
-        // 2. Show Toast on top in center
+        // 2. Broadcast to any other open tabs in the same browser
+        broadcastAuthEvent({
+            type: "SESSION_EXPIRED",
+            message: message,
+        });
+
+        // 3. Show Toast on top in center
         toast.error(message, {
             position: "top-center",
             autoClose: 3500,
         });
 
-        // 3. Show normal & professional session timeout popup
+        // 4. Show normal & professional session timeout popup
         setSessionExpired(true);
         setCountdown(3);
     };
@@ -57,66 +77,164 @@ export default function ProtectedRoute({ children }) {
             return;
         }
 
-        let timer;
-
-        const verifyToken = async () => {
-            try {
-                // 1. ACTUAL BACKEND TOKEN VERIFICATION
-                const res = await axios.get(
-                    "https://my-portfolio-backend-2026.onrender.com/admin/verify-token",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                if (!res.data.status) {
-                    handleSessionExpired(res.data.message || "Invalid session");
-                    return;
-                }
-
-                // 2. TOKEN PAYLOAD SE EXP NIKALO
-                const payload = JSON.parse(
-                    atob(token.split(".")[1])
-                );
-
+        // Check local token expiry timestamp first
+        try {
+            const parts = token.split(".");
+            if (parts.length >= 2) {
+                const payload = JSON.parse(atob(parts[1]));
                 const expiryTime = payload.exp * 1000;
                 const remainingTime = expiryTime - Date.now();
-
-                console.log(
-                    "Token expires in:",
-                    Math.floor(remainingTime / 1000),
-                    "seconds"
-                );
 
                 if (remainingTime <= 0) {
                     handleSessionExpired("Session expired. Please login again.");
                     return;
                 }
 
-                // 3. TOKEN VALID
-                setIsValid(true);
-
-                // 4. EXPIRATION TIMER
-                timer = setTimeout(() => {
+                // Local JWT expiration timer
+                timerRef.current = setTimeout(() => {
                     handleSessionExpired("Session expired. Please login again.");
                 }, remainingTime);
+            }
+        } catch (err) {
+            console.warn("Invalid token format in localStorage:", err);
+            handleSessionExpired("Invalid session token. Please login again.");
+            return;
+        }
 
-            } catch (error) {
-                console.log("Verify token error:", error.response?.data);
-                handleSessionExpired(
-                    error.response?.data?.message || "Invalid or expired session"
+        // Centralized token verification with backend
+        const verifyToken = async (isBackground = false) => {
+            if (sessionExpiredRef.current || isVerifyingRef.current) return;
+
+            const currentToken = localStorage.getItem("token");
+            if (!currentToken) {
+                handleSessionExpired("Session ended. Please login again.");
+                return;
+            }
+
+            isVerifyingRef.current = true;
+
+            try {
+                const res = await axios.get(
+                    "https://my-portfolio-backend-2026.onrender.com/admin/verify-token",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${currentToken}`
+                        },
+                        timeout: 8000
+                    }
                 );
+
+                if (!res.data || !res.data.status) {
+                    handleSessionExpired(
+                        res?.data?.message || "Session ended from another device. Please login again."
+                    );
+                    return;
+                }
+
+                // If initial verification passes, confirm valid
+                if (!isBackground) {
+                    setIsValid(true);
+                }
+            } catch (error) {
+                console.log("Token verification response:", error.response?.status, error.response?.data);
+
+                // If backend explicitly rejected with 401 / 403 or status: false
+                const isRejectedByBackend =
+                    error.response &&
+                    (error.response.status === 401 ||
+                     error.response.status === 403 ||
+                     error.response.data?.status === false);
+
+                if (isRejectedByBackend) {
+                    handleSessionExpired(
+                        error.response?.data?.message || "Session expired or logged out from another device."
+                    );
+                } else if (!isBackground) {
+                    // On initial mount only, if request failed completely, report error
+                    if (error.response?.status) {
+                        handleSessionExpired(
+                            error.response?.data?.message || "Session invalid or expired."
+                        );
+                    } else {
+                        // Allow initial load if transient network offline, but verify locally
+                        setIsValid(true);
+                    }
+                }
+            } finally {
+                isVerifyingRef.current = false;
             }
         };
 
-        verifyToken();
+        // 1. Initial verification on mount
+        verifyToken(false);
+
+        // 2. Real-time Cross-Device Heartbeat Polling (every 5 seconds)
+        // This detects when another device logs out or logs in immediately without manual refresh!
+        const heartbeatInterval = setInterval(() => {
+            if (!sessionExpiredRef.current && !isVerifyingRef.current) {
+                verifyToken(true);
+            }
+        }, 5000);
+
+        // 3. Immediate check when window regains focus or tab becomes visible
+        const handleWindowActivity = () => {
+            if (
+                document.visibilityState === "visible" &&
+                !sessionExpiredRef.current &&
+                !isVerifyingRef.current
+            ) {
+                verifyToken(true);
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleWindowActivity);
+        window.addEventListener("focus", handleWindowActivity);
+
+        // 4. Instant multi-tab synchronization via BroadcastChannel & storage events
+        const unsubscribeAuth = subscribeAuthEvents((event) => {
+            if (event.type === "AUTH_LOGOUT" || event.type === "SESSION_EXPIRED") {
+                handleSessionExpired(
+                    event.message || "Session ended from another tab/device. Please login again."
+                );
+            }
+        });
+
+        // 5. Global Axios Interceptor to catch 401/403 or unauthorized responses on any dashboard action
+        const interceptorId = axios.interceptors.response.use(
+            (response) => {
+                if (
+                    response.data &&
+                    response.data.status === false &&
+                    (response.data.message?.toLowerCase().includes("session") ||
+                     response.data.message?.toLowerCase().includes("token") ||
+                     response.data.message?.toLowerCase().includes("unauthorized") ||
+                     response.data.message?.toLowerCase().includes("logged out"))
+                ) {
+                    handleSessionExpired(response.data.message);
+                }
+                return response;
+            },
+            (error) => {
+                if (
+                    error.response &&
+                    (error.response.status === 401 || error.response.status === 403)
+                ) {
+                    const msg =
+                        error.response.data?.message ||
+                        "Session expired or logged out from another device.";
+                    handleSessionExpired(msg);
+                }
+                return Promise.reject(error);
+            }
+        );
 
         return () => {
-            if (timer) {
-                clearTimeout(timer);
-            }
+            clearInterval(heartbeatInterval);
+            if (timerRef.current) clearTimeout(timerRef.current);
+            document.removeEventListener("visibilitychange", handleWindowActivity);
+            window.removeEventListener("focus", handleWindowActivity);
+            unsubscribeAuth();
+            axios.interceptors.response.eject(interceptorId);
         };
     }, []);
 

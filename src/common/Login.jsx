@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
+import { broadcastAuthEvent, subscribeAuthEvents } from './authSync'
 
 export default function Login() {
 
@@ -12,9 +13,47 @@ export default function Login() {
     let [loader, setloader] = useState(false)
 
     useEffect(() => {
-        // Cleanly dismiss any lingering toasts (e.g. from refresh or dashboard)
+        // Cleanly dismiss any lingering toasts
         toast.dismiss();
-        sessionStorage.removeItem("session_expired");
+        sessionStorage.clear();
+
+        // Check if an active valid session already exists, auto-redirect to dashboard
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const parts = token.split(".");
+                if (parts.length >= 2) {
+                    const payload = JSON.parse(atob(parts[1]));
+                    if (payload?.exp && payload.exp * 1000 > Date.now()) {
+                        axios.get("https://my-portfolio-backend-2026.onrender.com/admin/verify-token", {
+                            headers: { Authorization: `Bearer ${token}` },
+                            timeout: 4000
+                        }).then((res) => {
+                            if (res.data?.status) {
+                                window.location.href = '/dashboard';
+                            }
+                        }).catch(() => {});
+                    }
+                }
+            } catch (_) {}
+        }
+
+        // Listen for login events from another tab (auto-sync without manual refresh)
+        const unsubscribe = subscribeAuthEvents((event) => {
+            if (event.type === 'AUTH_LOGIN') {
+                toast.info("Logged in from another tab. Opening dashboard...", {
+                    position: "top-center",
+                    autoClose: 1500
+                });
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 800);
+            }
+        });
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
     let showLoginSignUp = () => {
@@ -44,22 +83,36 @@ export default function Login() {
                     // console.log(finalRes);
                     setloader(false)
                     if (finalRes.status) {
+                        sessionStorage.clear();
                         localStorage.setItem('token', finalRes.token)
                         localStorage.setItem('Fletter', firtletter)
                         const nameFromEmail = obj.email.split('@')[0];
                         const formattedAdminName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
-                        localStorage.setItem('adminName', finalRes.name || formattedAdminName);
-                        toast.success(finalRes.message)
+                        const adminName = finalRes.name || formattedAdminName;
+                        localStorage.setItem('adminName', adminName);
+
+                        // Broadcast login to all open tabs for instant synchronization
+                        broadcastAuthEvent({
+                            type: 'AUTH_LOGIN',
+                            token: finalRes.token,
+                            name: adminName
+                        });
+
+                        toast.success(finalRes.message || "Login successful!")
                         e.target.reset()
                         setTimeout(() => {
-                            navigate('/dashboard')
-                        }, 1000);
+                            window.location.href = '/dashboard';
+                        }, 800);
                     }
                     else {
                         toast.error(finalRes.message)
                         setloader(false)
                     }
                 })
+                .catch((err) => {
+                    setloader(false);
+                    toast.error(err.response?.data?.message || "Failed to log in. Please try again.");
+                });
         }
 
         else {
