@@ -5,7 +5,7 @@
   "redirects": [
     {
       "source": "/portfolio",
-      "destination": "https://my-dynamic-portfolio-2026.vercel.app/",
+      "destination": "https://deepak-kushwaha-portfolio.vercel.app/",
       "permanent": false
     }
   ]
