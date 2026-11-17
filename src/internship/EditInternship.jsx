@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../config';
 
 export default function EditInternship() {
     let navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function EditInternship() {
         let form = e.target;
         let formValue = new FormData(form);
 
-        axios.put(`https://my-portfolio-backend-2026.onrender.com/admin/edit-intern/${formData.id}`, formValue)
+        axios.put(`${API_BASE_URL}/admin/edit-intern/${formData.id}`, formValue)
             .then((res) => res.data)
             .then((finalRes) => {
                 if (finalRes.status) {

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
+import { API_BASE_URL } from '../config'
 
 export default function Editskills() {
 
@@ -35,7 +36,7 @@ export default function Editskills() {
     let updateSkills = (e) => {
         setloader(true)
         e.preventDefault()
-        axios.put(`https://my-portfolio-backend-2026.onrender.com/admin/edit-skill/${formData.id}`, formData)
+        axios.put(`${API_BASE_URL}/admin/edit-skill/${formData.id}`, formData)
             .then((res) => res.data)
             .then((finalRes) => {
                 // console.log(finalRes);

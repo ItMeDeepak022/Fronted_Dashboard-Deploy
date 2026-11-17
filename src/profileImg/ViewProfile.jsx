@@ -4,6 +4,7 @@ import { CiEdit } from 'react-icons/ci'
 import { MdDelete } from 'react-icons/md'
 import { Link } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
+import { API_BASE_URL } from '../config'
 
 export default function ViewProfile() {
 
@@ -12,7 +13,7 @@ export default function ViewProfile() {
     let [loading, setloading] = useState(false)
     let getprofileData = (e) => {
         setloading(true)
-        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view`)
+        axios.get(`${API_BASE_URL}/admin/view`)
             .then((res) => res.data)
             .then((finalRes) => {
                 // console.log(finalRes);
@@ -34,7 +35,7 @@ export default function ViewProfile() {
         setloader(id)
         let Isdelete = confirm("Are you sure to delete...")
         if (Isdelete) {
-            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete/${id}`)
+            axios.delete(`${API_BASE_URL}/admin/delete/${id}`)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     getprofileData()

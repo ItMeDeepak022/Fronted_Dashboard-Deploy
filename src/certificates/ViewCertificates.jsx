@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
+import { API_BASE_URL } from '../config'
 
 export default function ViewCertificates() {
 
@@ -12,7 +13,7 @@ export default function ViewCertificates() {
 
     let getData = () => {
         setloading(true)
-        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-certificate`)
+        axios.get(`${API_BASE_URL}/admin/view-certificate`)
             .then((res) => res.data)
             .then((finalRes) => {
                 setdata(finalRes.data);
@@ -37,7 +38,7 @@ export default function ViewCertificates() {
         setloader(id)
         let Isdelete = confirm("Are you sure to delete...")
         if (Isdelete) {
-            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete-certificate/${id}`)
+            axios.delete(`${API_BASE_URL}/admin/delete-certificate/${id}`)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     setloader(null)

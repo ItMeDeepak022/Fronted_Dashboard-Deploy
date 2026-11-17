@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { broadcastAuthEvent, subscribeAuthEvents } from './authSync'
+import { API_BASE_URL } from '../config'
 
 export default function Login() {
 
@@ -25,7 +26,7 @@ export default function Login() {
                 if (parts.length >= 2) {
                     const payload = JSON.parse(atob(parts[1]));
                     if (payload?.exp && payload.exp * 1000 > Date.now()) {
-                        axios.get("https://my-portfolio-backend-2026.onrender.com/admin/verify-token", {
+                        axios.get(`${API_BASE_URL}/admin/verify-token`, {
                             headers: { Authorization: `Bearer ${token}` },
                             timeout: 4000
                         }).then((res) => {
@@ -76,8 +77,7 @@ export default function Login() {
             }
 
             let firtletter = obj.email.charAt(0).toUpperCase()
-            //   http://localhost:8000/admin/login  for local server
-            axios.post(`https://my-portfolio-backend-2026.onrender.com/admin/login`, obj) 
+            axios.post(`${API_BASE_URL}/admin/login`, obj) 
                 .then((res) => res.data)
                 .then((finalRes) => {
                     // console.log(finalRes);
@@ -123,7 +123,7 @@ export default function Login() {
             }
 
 
-            axios.post(`https://my-portfolio-backend-2026.onrender.com/admin/registration`, obj)
+            axios.post(`${API_BASE_URL}/admin/registration`, obj)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     // console.log(finalRes);

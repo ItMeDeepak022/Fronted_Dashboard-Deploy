@@ -4,6 +4,7 @@ import { Navigate } from "react-router";
 import { toast } from "react-toastify";
 import { ShieldAlert, Clock, LogIn } from "lucide-react";
 import { broadcastAuthEvent, subscribeAuthEvents } from "./common/authSync";
+import { API_BASE_URL } from "./config";
 
 export default function ProtectedRoute({ children }) {
     const [isValid, setIsValid] = useState(null);
@@ -115,7 +116,7 @@ export default function ProtectedRoute({ children }) {
 
             try {
                 const res = await axios.get(
-                    "https://my-portfolio-backend-2026.onrender.com/admin/verify-token",
+                    `${API_BASE_URL}/admin/verify-token`,
                     {
                         headers: {
                             Authorization: `Bearer ${currentToken}`

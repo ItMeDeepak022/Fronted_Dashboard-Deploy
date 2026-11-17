@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
+import { API_BASE_URL } from '../config'
 
 export default function ViewIntern() {
 
@@ -10,7 +11,7 @@ export default function ViewIntern() {
     let [loading,setloading]=useState(false)
     let getData = () => {
         setloading(true)
-        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-intern`)
+        axios.get(`${API_BASE_URL}/admin/view-intern`)
             .then((res) => res.data)
             .then((finalRes) => {
                 setdata(finalRes.data);
@@ -32,7 +33,7 @@ export default function ViewIntern() {
         setloader(id)
         let Isdelete = confirm("Are you sure to delete...")
         if (Isdelete) {
-            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete-intern/${id}`)
+            axios.delete(`${API_BASE_URL}/admin/delete-intern/${id}`)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     setloader(null)

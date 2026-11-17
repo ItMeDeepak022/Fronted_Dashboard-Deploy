@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
+import { API_BASE_URL } from '../config';
 
 export default function AddResume() {
     let navigate = useNavigate()
@@ -12,7 +13,7 @@ export default function AddResume() {
         let form = e.target;
         let formValue = new FormData(form)
 
-        axios.post(`https://my-portfolio-backend-2026.onrender.com/admin/add-resume`, formValue)
+        axios.post(`${API_BASE_URL}/admin/add-resume`, formValue)
             .then((res) => res.data)
             .then((finalRes) => {
                 if (finalRes.status) {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify';
+import { API_BASE_URL } from '../config';
 
 export default function Viewskills() {
     let [skillData, setskillData] = useState([])
@@ -9,7 +10,7 @@ export default function Viewskills() {
     let [loading, setloading] = useState(false)
     let getskillData = (e) => {
         setloading(true)
-        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-skills`)
+        axios.get(`${API_BASE_URL}/admin/view-skills`)
             .then((res) => res.data)
             .then((finalRes) => {
                 // console.log(finalRes);
@@ -31,7 +32,7 @@ export default function Viewskills() {
         setloader(id)
         let Isdelete = confirm("Are you sure to delete...")
         if (Isdelete) {
-            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete-skill/${id}`)
+            axios.delete(`${API_BASE_URL}/admin/delete-skill/${id}`)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     getskillData()

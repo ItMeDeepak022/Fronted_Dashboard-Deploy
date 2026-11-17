@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import {
     FolderGit2,
     Code2,
@@ -97,7 +98,7 @@ export default function Dashboard() {
             };
         } else {
             return {
-                greeting: "Working Late",
+                greeting: "Good Night Boss",
                 sub: "Here is your portfolio control summary. Make sure to rest well!",
                 icon: Moon,
                 iconColor: "text-indigo-600",
@@ -126,10 +127,10 @@ export default function Dashboard() {
         setIsRefreshing(true);
         try {
             const [projRes, skillRes, internRes, certRes] = await Promise.allSettled([
-                axios.get('https://my-portfolio-backend-2026.onrender.com/admin/view-project'),
-                axios.get('https://my-portfolio-backend-2026.onrender.com/admin/view-skills'),
-                axios.get('https://my-portfolio-backend-2026.onrender.com/admin/view-intern'),
-                axios.get('https://my-portfolio-backend-2026.onrender.com/admin/view-certificate'),
+                axios.get(`${API_BASE_URL}/admin/view-project`),
+                axios.get(`${API_BASE_URL}/admin/view-skills`),
+                axios.get(`${API_BASE_URL}/admin/view-intern`),
+                axios.get(`${API_BASE_URL}/admin/view-certificate`),
             ]);
 
             // If session expired, unmounted, or a newer fetch started, exit immediately without showing toast

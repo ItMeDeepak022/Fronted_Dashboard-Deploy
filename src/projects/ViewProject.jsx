@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify'
+import { API_BASE_URL } from '../config'
 
 export default function ViewProject() {
     let [data, setdata] = useState([])
@@ -11,7 +12,7 @@ export default function ViewProject() {
 
     let getData = () => {
         setloading(true)
-        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-project`)
+        axios.get(`${API_BASE_URL}/admin/view-project`)
             .then((res) => res.data)
             .then((finalRes) => {
                 setdata(finalRes.data);
@@ -34,7 +35,7 @@ export default function ViewProject() {
         setloader(id)
         let Isdelete = confirm("Are you sure to delete...")
         if (Isdelete) {
-            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete-project/${id}`)
+            axios.delete(`${API_BASE_URL}/admin/delete-project/${id}`)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     toast.success(finalRes.message)

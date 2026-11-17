@@ -26,6 +26,7 @@ import Editskills from './skills/Editskills'
 import ProtectedRoute from './Protected'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Setting from './pages/Setting'
 
 
 createRoot(document.getElementById('root')).render(
@@ -53,6 +54,7 @@ createRoot(document.getElementById('root')).render(
 
 
                <Route path="dashboard" element={<Dashboard />} />
+               <Route path='setting' element={<Setting />} />
 
                {/* Profile */}
                <Route path="profile/add" element={<AddProfile />} />

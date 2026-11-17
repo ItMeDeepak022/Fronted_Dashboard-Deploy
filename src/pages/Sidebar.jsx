@@ -7,6 +7,7 @@ import { IoIosNotifications } from "react-icons/io";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { broadcastAuthEvent } from '../common/authSync';
+import { API_BASE_URL } from '../config';
 import {
     User,
     FileText,
@@ -22,6 +23,8 @@ import {
     Bell,
     UserShield,
     LogOut,
+    Settings,
+    Trash,
 } from "lucide-react";
 
 export default function Sidebar({ collaps }) {
@@ -43,7 +46,6 @@ export default function Sidebar({ collaps }) {
         setShowLogoutModal(true);
     };
 
-    // http://localhost:8000/admin/logout-all-devices
     const handleConfirmLogout = async () => {
         setIsLoggingOut(true);
         const token = localStorage.getItem('token');
@@ -51,7 +53,7 @@ export default function Sidebar({ collaps }) {
         if (token) {
             try {
                 await axios.post(
-                    'https://my-portfolio-backend-2026.onrender.com/admin/logout-all-devices',
+                    `${API_BASE_URL}/admin/logout-all-devices`,
                     {},
                     {
                         headers: {
@@ -113,6 +115,7 @@ export default function Sidebar({ collaps }) {
             to: "certificates",
             icon: Award,
         },
+
     ];
 
     // let siderBarlist = ['Profile', 'Resume', 'Skills', 'Internship', 'Projects', "Certificates"]
@@ -122,7 +125,7 @@ export default function Sidebar({ collaps }) {
         <>
             {/* ================= MOBILE SIDEBAR ================= */}
 
-           
+
 
             {slider ? (
                 <button
@@ -213,6 +216,14 @@ export default function Sidebar({ collaps }) {
                             </li>
                         );
                     })}
+
+                    {/* Setting */}
+                    <Link to="/setting" onClick={Sliders}>
+                        <li className="flex items-center gap-3 transition bg-slate-100 px-4 py-2 text-black rounded-[25px] text-left cursor-pointer">
+                            <Settings size={20} /> Setting
+                        </li>
+                    </Link>
+
                 </ul>
 
                 {/* Logout */}
@@ -321,15 +332,33 @@ export default function Sidebar({ collaps }) {
                             </li>
                         );
                     })}
+
+                    <Link to="/setting">
+                        <li
+                            className={`w-full flex   ${collaps ? "justify-center bg-none" : "justify-start bg-slate-100"} items-center gap-3 transition hover:bg-slate-100  px-4 py-2 text-black rounded-[10px] text-left cursor-pointer`}
+                        >
+
+
+                            {
+                                collaps ?
+                                    <Settings size={25} />
+                                    :
+                                    <>
+                                        <Settings size={20} />Setting
+                                    </>
+
+                            }
+                        </li>
+                    </Link>
                 </ul>
 
                 {/* Logout */}
                 <div className="shrink-0 mt-auto p-3 border-t-1 border-t-gray-200">
                     <button
-                        className="cursor-pointer font-bold hover:bg-slate-300 bg-slate-200 w-full py-2  rounded-[10px] text-black text-center block"
+                        className={`cursor-pointer font-bold flex items-center justify-center ${collaps ? "bg-none" : "hover:bg-red-700 bg-red-600"} w-full py-2  rounded-[10px] text-white text-center block`}
                         onClick={logout}
                     >
-                        Logout
+                        {collaps ? <LogOut size={25} className='text-red-600 hover:text-red-700' /> : "Logout"}
                     </button>
                 </div>
 
@@ -338,7 +367,7 @@ export default function Sidebar({ collaps }) {
             {showLogoutModal && (
                 <div className="fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300">
                     <div className="bg-white rounded-2xl shadow-2xl border border-slate-200/80 max-w-sm w-full p-6 text-center relative overflow-hidden transition-all duration-200">
-                        
+
 
                         {/* Icon */}
                         <div className="w-13 h-13 rounded-2xl bg-rose-50 border border-rose-200/70 text-rose-600 flex items-center justify-center mx-auto mb-3.5 shadow-2xs">

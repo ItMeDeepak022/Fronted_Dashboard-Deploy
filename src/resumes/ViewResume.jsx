@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { toast, ToastContainer } from 'react-toastify';
+import { API_BASE_URL } from '../config';
 
 export default function ViewResume() {
     let [resumedata, setresumedata] = useState('')
@@ -10,7 +11,7 @@ export default function ViewResume() {
 
     let getresumeData = (e) => {
         setloading(true)
-        axios.get(`https://my-portfolio-backend-2026.onrender.com/admin/view-resume`)
+        axios.get(`${API_BASE_URL}/admin/view-resume`)
             .then((res) => res.data)
             .then((finalRes) => {
                 // console.log(finalRes);
@@ -34,7 +35,7 @@ export default function ViewResume() {
         let Isdelete = confirm("Are you sure to delete...")
         if (Isdelete) {
 
-            axios.delete(`https://my-portfolio-backend-2026.onrender.com/admin/delete-resume/${id}`)
+            axios.delete(`${API_BASE_URL}/admin/delete-resume/${id}`)
                 .then((res) => res.data)
                 .then((finalRes) => {
                     getresumeData()
