@@ -34,6 +34,8 @@ import {
     Image as ImageIcon
 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import API_BASE_URL from '../config';
 
 export default function Setting() {
     // Active Tab State: 'profile' | 'privacy' | 'notifications' | 'account'
@@ -99,11 +101,13 @@ export default function Setting() {
     // ==========================================
     // 2. PRIVACY & 2FA (STATIC UI ONLY)
     // ==========================================
-    const [is2FAEnabled, setIs2FAEnabled] = useState(false);
-    const [copiedCodes, setCopiedCodes] = useState(false);
+    const [is2FAEnabled, setIs2FAEnabled] = useState(() => {
+        return localStorage.getItem("isToggle") === "true";
+    });
     const [showCurrentPass, setShowCurrentPass] = useState(false);
     const [showNewPass, setShowNewPass] = useState(false);
     const [showConfirmPass, setShowConfirmPass] = useState(false);
+
 
     // Static Backup Codes
     const staticBackupCodes = [
@@ -111,33 +115,28 @@ export default function Setting() {
         '3910-5829', '4729-1048', '9501-3829'
     ];
 
-    // Static Privacy Preferences
-    const [privacySettings, setPrivacySettings] = useState({
-        searchIndexing: true,
-        ipWhitelist: false,
-    });
-
-    const togglePrivacySetting = (key) => {
-        setPrivacySettings((prev) => ({ ...prev, [key]: !prev[key] }));
-        toast.info('Privacy preference updated');
-    };
-
     // Static 2FA Button Toggle (UI Only, No Modals)
-    const handleToggle2FA = () => {
+    const handleToggle2FA = async () => {
         const nextState = !is2FAEnabled;
-        setIs2FAEnabled(nextState);
-        if (nextState) {
-            toast.success('Two-Factor Authentication (2FA) enabled!');
-        } else {
-            toast.warn('Two-Factor Authentication (2FA) disabled.');
-        }
-    };
+        try {
+            let response = await axios.put(`${API_BASE_URL}/admin/2FA`, { nextState }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            console.log(response.data,'2FA')
+            setIs2FAEnabled(nextState);
+            localStorage.setItem("isToggle", String(nextState));
 
-    const handleCopyBackupCodes = () => {
-        navigator.clipboard.writeText(staticBackupCodes.join('\n'));
-        setCopiedCodes(true);
-        toast.success('Backup recovery codes copied!');
-        setTimeout(() => setCopiedCodes(false), 2000);
+            if (response.data.status) {
+                toast.success(response.data.message);
+            } else {
+                toast.warn(response.data.message);
+            }
+        }
+        catch (error) {
+            toast.error(error.response?.data?.message);
+        }
     };
 
     const handlePasswordSubmit = (e) => {
@@ -248,7 +247,7 @@ export default function Setting() {
                                     <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
                                         Settings & Preferences
                                     </h1>
-                                     
+
                                 </div>
                                 <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                                     Configure your administrator profile, privacy safeguards, two-factor authentication, and notifications.
@@ -258,11 +257,10 @@ export default function Setting() {
 
                         {/* Quick 2FA status indicator badge */}
                         <div className="flex items-center gap-2 self-start md:self-center">
-                            <div className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 shadow-2xs ${
-                                is2FAEnabled
-                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                    : 'bg-amber-50 text-amber-700 border-amber-200'
-                            }`}>
+                            <div className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 shadow-2xs ${is2FAEnabled
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border-amber-200'
+                                }`}>
                                 <span className={`w-2 h-2 rounded-full ${is2FAEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
                                 <span>2FA Security: <strong>{is2FAEnabled ? 'Active' : 'Disabled'}</strong></span>
                             </div>
@@ -279,11 +277,10 @@ export default function Setting() {
                                     <button
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
-                                        className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                                            isActive
-                                                ? 'bg-slate-900 text-white shadow-xs'
-                                                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
-                                        }`}
+                                        className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${isActive
+                                            ? 'bg-slate-900 text-white shadow-xs'
+                                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                                            }`}
                                     >
                                         <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
                                         <span>{tab.label}</span>
@@ -305,7 +302,7 @@ export default function Setting() {
 
                         {/* LEFT COLUMN: Profile Logo & Details */}
                         <div className="lg:col-span-1 bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col items-center text-center h-fit">
-                            
+
                             {/* Hidden File Input for Avatar Upload */}
                             <input
                                 type="file"
@@ -551,11 +548,10 @@ export default function Setting() {
                                 <div>
                                     <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
                                         <div className="flex items-center gap-3">
-                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-2xs ${
-                                                is2FAEnabled
-                                                    ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
-                                                    : 'bg-amber-50 border-amber-200 text-amber-600'
-                                            }`}>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border shadow-2xs transition-colors ${is2FAEnabled
+                                                ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                                                : 'bg-amber-50 border-amber-200 text-amber-600'
+                                                }`}>
                                                 {is2FAEnabled ? (
                                                     <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
                                                 ) : (
@@ -569,13 +565,24 @@ export default function Setting() {
                                                 <p className="text-xs text-slate-500">TOTP security protection</p>
                                             </div>
                                         </div>
-                                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${
-                                            is2FAEnabled
-                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                                : 'bg-amber-50 text-amber-700 border-amber-200'
-                                        }`}>
-                                            {is2FAEnabled ? 'ENABLED' : 'DISABLED'}
-                                        </span>
+
+                                        <div className="flex items-center gap-2.5">
+
+                                            <button
+                                                type="button"
+                                                onClick={handleToggle2FA}
+                                                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${is2FAEnabled ? 'bg-emerald-600' : 'bg-slate-300'
+                                                    }`}
+                                                role="switch"
+                                                aria-checked={is2FAEnabled}
+                                                title={is2FAEnabled ? 'Click to disable 2FA' : 'Click to enable 2FA'}
+                                            >
+                                                <span
+                                                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${is2FAEnabled ? 'translate-x-5' : 'translate-x-0'
+                                                        }`}
+                                                />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <p className="text-xs text-slate-600 leading-relaxed mb-4">
@@ -591,75 +598,55 @@ export default function Setting() {
                                                     <p className="text-[11px] text-slate-400">Google Authenticator / Authy</p>
                                                 </div>
                                             </div>
-                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                                                is2FAEnabled ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'
-                                            }`}>
+                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${is2FAEnabled ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'
+                                                }`}>
                                                 {is2FAEnabled ? 'Connected' : 'Inactive'}
                                             </span>
                                         </div>
 
-                                        <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
-                                            <div className="flex items-center gap-2.5">
-                                                <KeyRound className="w-4 h-4 text-indigo-600 shrink-0" />
-                                                <div>
-                                                    <h4 className="text-xs font-bold text-slate-800">Backup Recovery Codes</h4>
-                                                    <p className="text-[11px] text-slate-400">6 one-time emergency codes</p>
-                                                </div>
+                                        {/* Dynamic Status / Recommendation Notice (UI Only) */}
+                                        <div className={`p-3.5 rounded-xl border flex items-start gap-3 transition-colors ${is2FAEnabled
+                                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-900'
+                                            : 'bg-amber-50/70 border-amber-200 text-amber-900'
+                                            }`}>
+                                            {is2FAEnabled ? (
+                                                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                            ) : (
+                                                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                                            )}
+                                            <div className="space-y-0.5">
+                                                <h5 className="text-xs font-bold">
+                                                    {is2FAEnabled ? 'Account Protected' : 'Protection Recommended'}
+                                                </h5>
+                                                <p className="text-[11px] leading-relaxed text-slate-600">
+                                                    {is2FAEnabled
+                                                        ? 'Two-Factor Authentication is currently active on your account. TOTP code is required on each admin sign-in.'
+                                                        : 'Turn on 2FA using the toggle switch above to add an extra layer of protection to your administrative account.'}
+                                                </p>
                                             </div>
-                                            <button
-                                                type="button"
-                                                onClick={handleCopyBackupCodes}
-                                                className="px-2.5 py-1 text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 transition cursor-pointer"
-                                            >
-                                                {copiedCodes ? 'Copied!' : 'Copy Codes'}
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* 2FA Enable/Disable Action Bottom Row */}
-                                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                                    <div className="flex items-center gap-2.5">
-                                        <button
-                                            type="button"
-                                            onClick={handleToggle2FA}
-                                            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                                                is2FAEnabled ? 'bg-emerald-600' : 'bg-slate-300'
-                                            }`}
-                                            role="switch"
-                                            aria-checked={is2FAEnabled}
-                                        >
-                                            <span
-                                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
-                                                    is2FAEnabled ? 'translate-x-5' : 'translate-x-0'
-                                                }`}
-                                            />
-                                        </button>
-                                        <span className="text-xs font-semibold text-slate-600">
-                                            {is2FAEnabled ? '2FA Active' : '2FA Inactive'}
+                                {/* Bottom Status Row Matching Right Card Footer */}
+                                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <span className={`w-2 h-2 rounded-full ${is2FAEnabled ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                                        <span className="text-xs font-medium text-slate-500">
+                                            Status: <strong className={is2FAEnabled ? 'text-emerald-700' : 'text-slate-700'}>
+                                                {is2FAEnabled ? 'High Security (2FA Active)' : 'Standard (2FA Disabled)'}
+                                            </strong>
                                         </span>
                                     </div>
-
                                     <button
                                         type="button"
                                         onClick={handleToggle2FA}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition shadow-xs cursor-pointer ${
-                                            is2FAEnabled
-                                                ? 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100'
-                                                : 'bg-emerald-600 text-white hover:bg-emerald-700 active:scale-95'
-                                        }`}
+                                        className={`text-xs font-bold transition-colors cursor-pointer ${is2FAEnabled
+                                            ? 'text-rose-600 hover:text-rose-700'
+                                            : 'text-blue-600 hover:text-blue-700'
+                                            }`}
                                     >
-                                        {is2FAEnabled ? (
-                                            <>
-                                                <Lock className="w-3.5 h-3.5 text-rose-600" />
-                                                Disable 2FA
-                                            </>
-                                        ) : (
-                                            <>
-                                                <ShieldCheck className="w-3.5 h-3.5 text-white" />
-                                                Enable 2FA
-                                            </>
-                                        )}
+                                        {is2FAEnabled ? 'Disable' : 'Enable'}
                                     </button>
                                 </div>
                             </div>
@@ -760,93 +747,6 @@ export default function Setting() {
 
                         </div>
 
-                        {/* ===== PRIVACY & SESSION MANAGEMENT ===== */}
-                        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-6">
-                            <div className="border-b border-slate-100 pb-4">
-                                <h3 className="text-base font-bold text-slate-900">Privacy & Access Controls</h3>
-                                <p className="text-xs text-slate-500">Manage data indexing and active admin sessions</p>
-                            </div>
-
-                            <div className="divide-y divide-slate-100">
-                                <div className="py-3 flex items-center justify-between gap-4">
-                                    <div>
-                                        <h4 className="text-xs sm:text-sm font-semibold text-slate-800">Public Portfolio Search Indexing</h4>
-                                        <p className="text-xs text-slate-500">Allow search engines (Google, Bing) to index your public portfolio URL</p>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => togglePrivacySetting('searchIndexing')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            privacySettings.searchIndexing ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
-                                    >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            privacySettings.searchIndexing ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
-                                    </button>
-                                </div>
-
-                                <div className="py-3 flex items-center justify-between gap-4">
-                                    <div>
-                                        <h4 className="text-xs sm:text-sm font-semibold text-slate-800">IP Whitelist Strict Mode</h4>
-                                        <p className="text-xs text-slate-500">Only permit admin dashboard logins from recognized IP addresses</p>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => togglePrivacySetting('ipWhitelist')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            privacySettings.ipWhitelist ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
-                                    >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            privacySettings.ipWhitelist ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Active Sessions */}
-                            <div className="pt-2">
-                                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
-                                    Current Active Sessions
-                                </h4>
-                                <div className="space-y-2.5">
-                                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
-                                        <div className="flex items-center gap-3">
-                                            <Laptop className="w-5 h-5 text-blue-600" />
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs font-bold text-slate-800">Windows 11 (Chrome 122.0)</span>
-                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                                        Current Session
-                                                    </span>
-                                                </div>
-                                                <p className="text-[11px] text-slate-400">Noida, India • IP: 103.24.xxx.xxx</p>
-                                            </div>
-                                        </div>
-                                        <span className="text-xs text-emerald-600 font-semibold">Active Now</span>
-                                    </div>
-
-                                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
-                                        <div className="flex items-center gap-3">
-                                            <Smartphone className="w-5 h-5 text-slate-500" />
-                                            <div>
-                                                <span className="text-xs font-bold text-slate-800">iPhone 15 Pro (Safari Mobile)</span>
-                                                <p className="text-[11px] text-slate-400">Noida, India • Last active 2 hours ago</p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => toast.info('Session revoked (UI only)')}
-                                            className="text-xs text-rose-600 hover:text-rose-700 font-semibold cursor-pointer"
-                                        >
-                                            Revoke
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 )}
 
@@ -876,13 +776,11 @@ export default function Setting() {
                                     <button
                                         type="button"
                                         onClick={() => toggleNotification('emailInquiries')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            notifications.emailInquiries ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${notifications.emailInquiries ? 'bg-blue-600' : 'bg-slate-300'
+                                            }`}
                                     >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            notifications.emailInquiries ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
+                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${notifications.emailInquiries ? 'translate-x-5' : 'translate-x-0'
+                                            }`} />
                                     </button>
                                 </div>
 
@@ -894,13 +792,11 @@ export default function Setting() {
                                     <button
                                         type="button"
                                         onClick={() => toggleNotification('emailSecurity')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            notifications.emailSecurity ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${notifications.emailSecurity ? 'bg-blue-600' : 'bg-slate-300'
+                                            }`}
                                     >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            notifications.emailSecurity ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
+                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${notifications.emailSecurity ? 'translate-x-5' : 'translate-x-0'
+                                            }`} />
                                     </button>
                                 </div>
 
@@ -912,13 +808,11 @@ export default function Setting() {
                                     <button
                                         type="button"
                                         onClick={() => toggleNotification('emailWeeklyReport')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            notifications.emailWeeklyReport ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${notifications.emailWeeklyReport ? 'bg-blue-600' : 'bg-slate-300'
+                                            }`}
                                     >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            notifications.emailWeeklyReport ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
+                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${notifications.emailWeeklyReport ? 'translate-x-5' : 'translate-x-0'
+                                            }`} />
                                     </button>
                                 </div>
 
@@ -930,13 +824,11 @@ export default function Setting() {
                                     <button
                                         type="button"
                                         onClick={() => toggleNotification('emailSystemAlerts')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            notifications.emailSystemAlerts ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${notifications.emailSystemAlerts ? 'bg-blue-600' : 'bg-slate-300'
+                                            }`}
                                     >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            notifications.emailSystemAlerts ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
+                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${notifications.emailSystemAlerts ? 'translate-x-5' : 'translate-x-0'
+                                            }`} />
                                     </button>
                                 </div>
                             </div>
@@ -965,13 +857,11 @@ export default function Setting() {
                                     <button
                                         type="button"
                                         onClick={() => toggleNotification('pushBrowser')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            notifications.pushBrowser ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${notifications.pushBrowser ? 'bg-blue-600' : 'bg-slate-300'
+                                            }`}
                                     >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            notifications.pushBrowser ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
+                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${notifications.pushBrowser ? 'translate-x-5' : 'translate-x-0'
+                                            }`} />
                                     </button>
                                 </div>
 
@@ -983,13 +873,11 @@ export default function Setting() {
                                     <button
                                         type="button"
                                         onClick={() => toggleNotification('soundAlerts')}
-                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                            notifications.soundAlerts ? 'bg-blue-600' : 'bg-slate-300'
-                                        }`}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${notifications.soundAlerts ? 'bg-blue-600' : 'bg-slate-300'
+                                            }`}
                                     >
-                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${
-                                            notifications.soundAlerts ? 'translate-x-5' : 'translate-x-0'
-                                        }`} />
+                                        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition duration-200 ${notifications.soundAlerts ? 'translate-x-5' : 'translate-x-0'
+                                            }`} />
                                     </button>
                                 </div>
                             </div>
@@ -1095,7 +983,7 @@ export default function Setting() {
                             </form>
                         </div>
 
-                        
+
 
                         {/* Danger Zone */}
                         <div className="bg-white border border-rose-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
@@ -1108,7 +996,7 @@ export default function Setting() {
                                     <p className="text-xs text-rose-600">Irreversible actions that affect your administrator account.</p>
                                 </div>
                             </div>
- 
+
 
                             {/* Delete Administrator Account */}
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-rose-50/50 border border-rose-200/60">
@@ -1189,11 +1077,10 @@ export default function Setting() {
                                 type="button"
                                 disabled={deleteConfirmText.trim() !== 'DELETE'}
                                 onClick={handleConfirmDeleteAccount}
-                                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white transition shadow-xs cursor-pointer ${
-                                    deleteConfirmText.trim() === 'DELETE'
-                                        ? 'bg-rose-600 hover:bg-rose-700 active:scale-95'
-                                        : 'bg-rose-300 cursor-not-allowed'
-                                }`}
+                                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white transition shadow-xs cursor-pointer ${deleteConfirmText.trim() === 'DELETE'
+                                    ? 'bg-rose-600 hover:bg-rose-700 active:scale-95'
+                                    : 'bg-rose-300 cursor-not-allowed'
+                                    }`}
                             >
                                 Delete Account
                             </button>

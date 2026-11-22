@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router';
-import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import {
     FolderGit2,
@@ -20,6 +19,7 @@ import { toast } from 'react-toastify';
 
 import CurveChart from '../components/charts/CurveChart';
 import XYChart from '../components/charts/XYChart';
+import axios from 'axios';
 
 // Helper to determine if user session is actively valid and not expired
 const isSessionValid = () => {
@@ -37,7 +37,7 @@ const isSessionValid = () => {
         }
         return true;
     } catch {
-        return false;
+        return false; 
     }
 };
 
@@ -125,9 +125,7 @@ export default function Dashboard() {
 
         const currentFetchId = ++fetchIdRef.current;
         setIsRefreshing(true);
-        try {
-            const [projRes, skillRes, internRes, certRes] = await Promise.allSettled([
-                axios.get(`${API_BASE_URL}/admin/view-project`),
+        try {            const [projRes, skillRes, internRes, certRes] = await Promise.allSettled([                axios.get(`${API_BASE_URL}/admin/view-project`),
                 axios.get(`${API_BASE_URL}/admin/view-skills`),
                 axios.get(`${API_BASE_URL}/admin/view-intern`),
                 axios.get(`${API_BASE_URL}/admin/view-certificate`),
