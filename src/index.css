@@ -21,12 +21,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    padding: 20px;
+    overflow: hidden; /* Desktop: strictly no scrollbar */
     background: var(--pk-page);
     color: var(--pk-ink);
-    -webkit-overflow-scrolling: touch;
+}
+
+.pk-dots-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
 }
 
  .pk-dot {
@@ -375,11 +381,20 @@
      }
  }
 
- /* mobile: hide the left image panel & optimize scrolling */
+ /* mobile: hide the left image panel & allow smooth scroll without visible scrollbar */
  @media (max-width: 760px) {
      .pk-page {
+         overflow-y: auto;
+         overflow-x: hidden;
+         scrollbar-width: none;
+         -ms-overflow-style: none;
          padding: 20px 14px;
          justify-content: flex-start;
+         -webkit-overflow-scrolling: touch;
+     }
+
+     .pk-page::-webkit-scrollbar {
+         display: none;
      }
 
      .pk-shell {

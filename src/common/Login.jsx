@@ -729,8 +729,10 @@ export default function Login() {
 
     return (
         <div className="pk-page">
-            <span className="pk-dot pk-dot1" />
-            <span className="pk-dot pk-dot2" />
+            <div className="pk-dots-bg" aria-hidden="true">
+                <span className="pk-dot pk-dot1" />
+                <span className="pk-dot pk-dot2" />
+            </div>
 
             <div className="pk-shell">
                 {/* Left side - your character image */}
